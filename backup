@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced Clicker Game with Upgrades</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevents scroll due to falling images */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        /* Gradient background from light purple to soft pink */
+        background: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 100%);
+    }
+    #game {
+        flex-grow: 1;
+        text-align: center;
+    }
+    #shop {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+    }
+    #score {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    #muteButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid #9b72aa; /* Purple border */
+    background-color: #e6cde3; /* Lighter purple background */
+    color: #5a3a5b; /* Darker purple text color for contrast */
+    border-radius: 8px; /* Slightly rounded corners for a softer look */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
+}
+
+#muteButton:hover {
+    background-color: #d1a9ce; /* Slightly darker purple on hover for interactivity */
+    color: #ffffff; /* White text color on hover for better readability */
+}
+
+    img.clickable-image {
+        cursor: pointer;
+        transition: transform 0.1s;
+        width: 200px; /* Bigger clickable image */
+        height: auto;
+    }
+    img.clickable-image:active {
+        transform: scale(0.9);
+    }
+    .falling-image {
+    position: fixed;
+    top: 0px; /* Ensure starting at the top */
+    opacity: 0.5;
+    width: 50px; /* Adjust size as needed */
+    height: auto;
+    pointer-events: none;
+    animation: fall 3s linear forwards;
+}
+@keyframes fall {
+    from { top: 0px; }
+    to { top: 100vh; }
+}
+    .can-afford {
+        color: green;
+    }
+    .cannot-afford {
+        color: red;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 20px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        border: 2px solid #9b72aa; /* Purple border */
+        background-color: #e6cde3; /* Lighter purple background */
+        color: #5a3a5b; /* Darker purple text color for contrast */
+        border-radius: 8px; /* Slightly rounded corners for a softer look */
+        transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
+    }
+
+    button:hover {
+        background-color: #d1a9ce; /* Slightly darker purple on hover for interactivity */
+        color: #ffffff; /* White text color on hover for better readability */
+    }
+
+    .can-afford {
+        color: green;
+    }
+
+    .cannot-afford {
+        color: red;
+    }
+</style>
+
+</head>
+<body>
+
+<div id="shop">
+    <h2>Shop</h2>
+    <button id="buyUpgrade" class="cannot-afford">+1 for 50 Points</button>
+    <button id="buyAutoPoints" class="cannot-afford">Auto +1/sec for 500 Points</button>
+    <button id="bigUpgrade" class="cannot-afford">+100 for 10,000 Points</button>
+    <button id="bigAutoPoints" class="cannot-afford">+100/sec for 50,000 Points</button>
+    <button id="massiveClickUpgrade" class="cannot-afford">+500/click for 150,000 Points</button>
+    <button id="massiveAutoPoints" class="cannot-afford">+500/sec for 200,000 Points</button>
+    <button id="hugeClickUpgrade" class="cannot-afford">+5,000/click for 500,000 Points</button>
+    <button id="hugeAutoPoints" class="cannot-afford">+5,000/sec for 750,000 Points</button>
+
+
+</div>
+
+<div id="game">
+    <div id="score">Score: 0</div>
+    <img src='drake-21-savage-her-loss-album-cver.webp'; alt="Clickable" class="clickable-image" id="clickMe">
+</div>
+
+<!-- Background music -->
+<audio loop autoplay muted>
+    <source src="CircoLoco.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<!-- Mute Button -->
+<button id="muteButton" style="position: fixed; bottom: 20px; right: 20px;">Mute</button>
+
+<script>
+    let score = 0;
+    let pointsPerClick = 1;
+    let pointsPerSecond = 0;
+    let upgradePrice = 50;
+    let autoPointsPrice = 500;
+    let bigUpgradePrice = 10000;
+    let bigAutoPointsPrice = 50000; // Initial price for the +100/sec upgrade
+    let massiveClickUpgradePrice = 150000; // Initial price for the +500/click upgrade
+    let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
+    let hugeClickUpgradePrice = 500000; // Initial price for the +5000/click upgrade
+    let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
+
+    
+    const scoreDisplay = document.getElementById('score');
+    const clickMeImage = document.getElementById('clickMe');
+    const buyUpgradeButton = document.getElementById('buyUpgrade');
+    const buyAutoPointsButton = document.getElementById('buyAutoPoints');
+    const bigUpgradeButton = document.getElementById('bigUpgrade');
+    const bigAutoPointsButton = document.getElementById('bigAutoPoints');
+    const massiveClickUpgradeButton = document.getElementById('massiveClickUpgrade');
+    const massiveAutoPointsButton = document.getElementById('massiveAutoPoints');
+    const hugeClickUpgradeButton = document.getElementById('hugeClickUpgrade');
+    const hugeAutoPointsButton = document.getElementById('hugeAutoPoints');
+
+    function updateButtonStyles() {
+        // Updating button texts and affordability colors
+        buyUpgradeButton.innerHTML = `+1 for ${upgradePrice} Points`;
+        buyAutoPointsButton.innerHTML = `Auto +1/sec for ${autoPointsPrice.toFixed(0)} Points`;
+        bigUpgradeButton.innerHTML = `+100 for ${bigUpgradePrice} Points`;
+
+        buyUpgradeButton.classList.toggle("can-afford", score >= upgradePrice);
+        buyUpgradeButton.classList.toggle("cannot-afford", score < upgradePrice);
+        
+        buyAutoPointsButton.classList.toggle("can-afford", score >= autoPointsPrice);
+        buyAutoPointsButton.classList.toggle("cannot-afford", score < autoPointsPrice);
+
+        bigUpgradeButton.classList.toggle("can-afford", score >= bigUpgradePrice);
+        bigUpgradeButton.classList.toggle("cannot-afford", score < bigUpgradePrice);
+
+        bigAutoPointsButton.innerHTML = `+100/sec for ${bigAutoPointsPrice} Points`;
+        bigAutoPointsButton.classList.toggle("can-afford", score >= bigAutoPointsPrice);
+        bigAutoPointsButton.classList.toggle("cannot-afford", score < bigAutoPointsPrice);
+
+        massiveClickUpgradeButton.innerHTML = `+500/click for ${massiveClickUpgradePrice} Points`;
+        massiveClickUpgradeButton.classList.toggle("can-afford", score >= massiveClickUpgradePrice);
+        massiveClickUpgradeButton.classList.toggle("cannot-afford", score < massiveClickUpgradePrice);
+    
+        massiveAutoPointsButton.innerHTML = `+500/sec for ${massiveAutoPointsPrice} Points`;
+        massiveAutoPointsButton.classList.toggle("can-afford", score >= massiveAutoPointsPrice);
+        massiveAutoPointsButton.classList.toggle("cannot-afford", score < massiveAutoPointsPrice);
+        
+        hugeClickUpgradeButton.innerHTML = `+5000/click for ${massiveClickUpgradePrice} Points`;
+        hugeClickUpgradeButton.classList.toggle("can-afford", score >= massiveClickUpgradePrice);
+        hugeClickUpgradeButton.classList.toggle("cannot-afford", score < massiveClickUpgradePrice);
+    
+        hugeAutoPointsButton.innerHTML = `+5000/sec for ${massiveAutoPointsPrice} Points`;
+        hugeAutoPointsButton.classList.toggle("can-afford", score >= massiveAutoPointsPrice);
+        hugeAutoPointsButton.classList.toggle("cannot-afford", score < massiveAutoPointsPrice);
+    }
+   clickMeImage.onclick = function() {
+    score += pointsPerClick;
+    updateScoreAndShop();
+
+    const fallingImage = document.createElement('img');
+    fallingImage.src = 'drake-21-savage-her-loss-album-cver.webp';
+    fallingImage.classList.add('falling-image');
+
+    const maxWidth = window.innerWidth - 50; // Assuming the image width is about 50px
+    const randomLeft = Math.floor(Math.random() * maxWidth);
+    fallingImage.style.left = `${randomLeft}px`;
+
+    document.body.appendChild(fallingImage);
+
+    setTimeout(() => {
+        document.body.removeChild(fallingImage);
+    }, 3000);
+};
+
+
+    buyUpgradeButton.onclick = function() {
+        if (score >= upgradePrice) {
+            score -= upgradePrice;
+            pointsPerClick += 1;
+            upgradePrice = Math.round(upgradePrice * 1.02);
+            updateScoreAndShop();
+        }
+    };
+
+    buyAutoPointsButton.onclick = function() {
+        if (score >= autoPointsPrice) {
+            score -= autoPointsPrice;
+            pointsPerSecond += 1;
+            autoPointsPrice *= 1.05;
+            autoPointsPrice = Math.round(autoPointsPrice);
+            updateScoreAndShop();
+        }
+    };
+
+    bigUpgradeButton.onclick = function() {
+        if (score >= bigUpgradePrice) {
+            score -= bigUpgradePrice;
+            pointsPerClick += 100;
+            bigUpgradePrice *= 1.05;
+            bigUpgradePrice = Math.round(bigUpgradePrice);
+            updateScoreAndShop();
+        }
+    };
+    bigAutoPointsButton.addEventListener('click', function() {
+    if (score >= bigAutoPointsPrice) {
+        score -= bigAutoPointsPrice; // Deduct the cost from the score
+        pointsPerSecond += 100; // Increase points per second by 100
+        bigAutoPointsPrice = Math.round(bigAutoPointsPrice * 1.03); // Increase the price by 3%
+        updateScoreAndShop(); // Update the score display and button styles
+    }
+});
+
+    massiveClickUpgradeButton.addEventListener('click', function() {
+    if (score >= massiveClickUpgradePrice) {
+        score -= massiveClickUpgradePrice;
+        pointsPerClick += 500;
+        massiveClickUpgradePrice = Math.round(massiveClickUpgradePrice * 1.05);
+        updateScoreAndShop();
+    }
+});
+
+    massiveAutoPointsButton.addEventListener('click', function() {
+    if (score >= massiveAutoPointsPrice) {
+        score -= massiveAutoPointsPrice;
+        pointsPerSecond += 500;
+        massiveAutoPointsPrice = Math.round(massiveAutoPointsPrice * 1.05);
+        updateScoreAndShop();
+    }
+});
+       hugeClickUpgradeButton.addEventListener('click', function() {
+        if (score >= hugeClickUpgradePrice) { // Ensure variable name consistency
+            score -= hugeClickUpgradePrice;
+            pointsPerClick += 5000;
+            hugeClickUpgradePrice = Math.round(hugeClickUpgradePrice * 1.05); // Correct variable used
+            updateScoreAndShop();
+        }
+    });
+
+    hugeAutoPointsButton.addEventListener('click', function() {
+        if (score >= hugeAutoPointsPrice) {
+            score -= hugeAutoPointsPrice;
+            pointsPerSecond += 5000; // Adjusted to add 5000 points per second
+            hugeAutoPointsPrice = Math.round(hugeAutoPointsPrice * 1.05); // Correct variable used
+            updateScoreAndShop();
+        }
+    });
+
+    function updateScoreAndShop() {
+        scoreDisplay.innerHTML = "Score: " + score;
+        updateButtonStyles();
+    }
+
+    setInterval(function() {
+        if (pointsPerSecond > 0) {
+            score += pointsPerSecond;
+            updateScoreAndShop();
+        }
+    }, 1000); // Automatically increases score every second based on pointsPerSecond
+
+    updateScoreAndShop();
+
+document.addEventListener('DOMContentLoaded', function() {
+    const audio = document.querySelector('audio');
+    const muteButton = document.getElementById('muteButton');
+    
+    // Check if the audio is not already playing (considering autoplay policies)
+    if (audio.paused) {
+        muteButton.textContent = 'Unmute';
+    } else {
+        muteButton.textContent = 'Mute';
+    }
+
+    muteButton.addEventListener('click', function() {
+        // Check if audio is paused to handle play action
+        if (audio.paused) {
+            audio.play().then(() => {
+                muteButton.textContent = 'Mute';
+            }).catch(error => {
+                console.error("Playback failed:", error);
+            });
+        } else {
+            // Toggle between mute and unmute states
+            audio.muted = !audio.muted;
+            muteButton.textContent = audio.muted ? 'Unmute' : 'Mute';
+        }
+    });
+});
+
+</script>
+
+</body>
+</html>
