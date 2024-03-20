@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Clicker Game with Upgradeable Shop</title>
+    <title>Clicker Game with Rounded Upgrade Prices</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -53,7 +53,7 @@
     const buyUpgradeButton = document.getElementById("buyUpgrade");
 
     function updateButtonStyles() {
-        buyUpgradeButton.innerHTML = `+1 for ${upgradePrice.toFixed(0)} Points`; // Update button text with current price
+        buyUpgradeButton.innerHTML = `+1 for ${upgradePrice} Points`; // Update button text with current price
         if (score >= upgradePrice) {
             buyUpgradeButton.classList.remove("cannot-afford");
             buyUpgradeButton.classList.add("can-afford");
@@ -72,7 +72,7 @@
         if (score >= upgradePrice) {
             score -= upgradePrice;
             pointsPerClick += 1; // Increase points per click by 1
-            upgradePrice *= 1.02; // Increase the price by 2%
+            upgradePrice = Math.round(upgradePrice * 1.02); // Increase the price by 2% and round to nearest whole number
             updateScoreAndShop();
         }
     };
