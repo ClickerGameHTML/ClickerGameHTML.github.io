@@ -28,6 +28,22 @@
         font-size: 24px;
         margin-bottom: 20px;
     }
+    #muteButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 2px solid #9b72aa; /* Purple border */
+    background-color: #e6cde3; /* Lighter purple background */
+    color: #5a3a5b; /* Darker purple text color for contrast */
+    border-radius: 8px; /* Slightly rounded corners for a softer look */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
+}
+
+#muteButton:hover {
+    background-color: #d1a9ce; /* Slightly darker purple on hover for interactivity */
+    color: #ffffff; /* White text color on hover for better readability */
+}
+
     img.clickable-image {
         cursor: pointer;
         transition: transform 0.1s;
@@ -98,10 +114,12 @@
 </div>
 
 <!-- Background music -->
-<audio loop autoplay>
+<audio id="backgroundMusic" loop autoplay>
     <source src="CircoLoco.mp3" type="audio/mp3">
     Your browser does not support the audio element.
 </audio>
+
+<button id="muteButton">Mute Music</button>
 
 <script>
     let score = 0;
@@ -194,7 +212,20 @@
         }
     }, 1000); // Automatically increases score every second based on pointsPerSecond
 
-    updateScoreAndShop();</script>
+    updateScoreAndShop();
+
+    document.getElementById('muteButton').addEventListener('click', function () {
+    var backgroundMusic = document.getElementById('backgroundMusic');
+    if (backgroundMusic.muted) {
+        backgroundMusic.muted = false;
+        this.textContent = 'Mute Music'; // Update button text
+    } else {
+        backgroundMusic.muted = true;
+        this.textContent = 'Unmute Music'; // Update button text
+    }
+});
+
+</script>
 
 </body>
 </html>
