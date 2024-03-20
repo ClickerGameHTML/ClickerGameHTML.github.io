@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clicker Game with Shop</title>
+    <style>
+        body {
+            text-align: center;
+            margin-top: 50px;
+            font-family: Arial, sans-serif;
+        }
+        #score, #shop {
+            font-size: 24px;
+            margin: 20px;
+        }
+        #clickMe, #buyUpgrade {
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #buyUpgrade {
+            display: none; /* Hide button initially */
+        }
+    </style>
+</head>
+<body>
+
+<h2>Clicker Game with Shop</h2>
+<div id="score">Score: 0</div>
+<button id="clickMe">Click me!</button>
+<div id="shop">
+    <button id="buyUpgrade">Buy 2x Click for 50 Points</button>
+</div>
+
+<script>
+    let score = 0;
+    let pointsPerClick = 1;
+
+    const scoreDisplay = document.getElementById("score");
+    const clickMeButton = document.getElementById("clickMe");
+    const buyUpgradeButton = document.getElementById("buyUpgrade");
+
+    clickMeButton.onclick = function() {
+        score += pointsPerClick; // Increase score by pointsPerClick
+        updateScoreDisplay();
+        checkForUpgrades();
+    };
+
+    buyUpgradeButton.onclick = function() {
+        if (score >= 50) {
+            score -= 50; // Deduct 50 points for the upgrade
+            pointsPerClick = 2; // Now each click is worth 2 points
+            buyUpgradeButton.style.display = "none"; // Hide the upgrade button after purchase
+            updateScoreDisplay();
+        }
+    };
+
+    function updateScoreDisplay() {
+        scoreDisplay.innerHTML = "Score: " + score; // Update score display
+    }
+
+    function checkForUpgrades() {
+        if (score >= 50 && pointsPerClick == 1) {
+            buyUpgradeButton.style.display = "inline"; // Show the upgrade button if the player has 50 points and hasn't bought the upgrade yet
+        }
+    }
+</script>
+
+</body>
+</html>
