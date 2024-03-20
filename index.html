@@ -114,7 +114,7 @@
 </div>
 
 <!-- Background music -->
-<audio id="backgroundMusic" loop autoplay>
+<audio loop autoplay controls>
     <source src="CircoLoco.mp3" type="audio/mp3">
     Your browser does not support the audio element.
 </audio>
@@ -231,6 +231,11 @@ muteButton.addEventListener('click', function() {
         isMuted = true; // Update mute state
     }
 });
+
+const audio = document.querySelector('audio');
+audio.muted = false;
+audio.play();
+
 </script>
 
 </body>
