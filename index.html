@@ -3,66 +3,68 @@
 <head>
     <title>Advanced Clicker Game with Upgrades</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-            overflow: hidden; /* Prevents scroll due to falling images */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        #game {
-            flex-grow: 1;
-            text-align: center;
-        }
-        #shop {
-            position: absolute;
-            left: 20px;
-            top: 20px;
-        }
-        #score {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        img.clickable-image {
-            cursor: pointer;
-            transition: transform 0.1s;
-            width: 200px; /* Bigger clickable image */
-            height: auto;
-        }
-        img.clickable-image:active {
-            transform: scale(0.9);
-        }
-        .falling-image {
-            position: fixed;
-            pointer-events: none; /* Allows clicks to pass through the falling images */
-            opacity: 0.5;
-            animation: fall 3s linear forwards;
-            width: 25px; /* Much smaller falling image */
-            height: auto;
-        }
-        @keyframes fall {
-            from { transform: translateY(-50px); }
-            to { transform: translateY(100vh); }
-        }
-        .can-afford {
-            color: green;
-        }
-        .cannot-afford {
-            color: red;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 20px;
-            cursor: pointer;
-            margin-bottom: 10px;
-            border: none;
-            background-color: #f0f0f0;
-        }
-    </style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevents scroll due to falling images */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        /* Gradient background from light purple to soft pink */
+        background: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 100%);
+    }
+    #game {
+        flex-grow: 1;
+        text-align: center;
+    }
+    #shop {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+    }
+    #score {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    img.clickable-image {
+        cursor: pointer;
+        transition: transform 0.1s;
+        width: 200px; /* Bigger clickable image */
+        height: auto;
+    }
+    img.clickable-image:active {
+        transform: scale(0.9);
+    }
+    .falling-image {
+        position: fixed;
+        pointer-events: none; /* Allows clicks to pass through the falling images */
+        opacity: 0.5;
+        animation: fall 3s linear forwards;
+        width: 25px; /* Much smaller falling image */
+        height: auto;
+    }
+    @keyframes fall {
+        from { transform: translateY(-50px); }
+        to { transform: translateY(100vh); }
+    }
+    .can-afford {
+        color: green;
+    }
+    .cannot-afford {
+        color: red;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 20px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        border: none;
+        background-color: #f0f0f0;
+    }
+</style>
+
 </head>
 <body>
 
