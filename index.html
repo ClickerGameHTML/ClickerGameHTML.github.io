@@ -119,7 +119,8 @@
     Your browser does not support the audio element.
 </audio>
 
-<button id="muteButton">Mute Music</button>
+<!-- Mute Button -->
+<button id="muteButton" style="position: fixed; bottom: 20px; right: 20px;">Mute</button>
 
 <script>
     let score = 0;
@@ -214,17 +215,22 @@
 
     updateScoreAndShop();
 
-    document.getElementById('muteButton').addEventListener('click', function () {
-    var backgroundMusic = document.getElementById('backgroundMusic');
-    if (backgroundMusic.muted) {
-        backgroundMusic.muted = false;
-        this.textContent = 'Mute Music'; // Update button text
+const backgroundMusic = document.querySelector('audio');
+const muteButton = document.getElementById('muteButton');
+
+let isMuted = false; // Track whether the sound is currently muted
+
+muteButton.addEventListener('click', function() {
+    if (isMuted) {
+        backgroundMusic.muted = false; // Unmute the music
+        muteButton.textContent = 'Mute'; // Update button text
+        isMuted = false; // Update mute state
     } else {
-        backgroundMusic.muted = true;
-        this.textContent = 'Unmute Music'; // Update button text
+        backgroundMusic.muted = true; // Mute the music
+        muteButton.textContent = 'Unmute'; // Update button text
+        isMuted = true; // Update mute state
     }
 });
-
 </script>
 
 </body>
