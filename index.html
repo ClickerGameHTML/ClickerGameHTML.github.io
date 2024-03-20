@@ -130,68 +130,61 @@
 <button id="muteButton" style="position: fixed; bottom: 20px; right: 20px;">Mute</button>
 
 <script>
-    let score = 0;
-    let pointsPerClick = 1;
-    let pointsPerSecond = 0;
-    let upgradePrice = 50;
-    let autoPointsPrice = 500;
-    let bigUpgradePrice = 10000;
-    let bigAutoPointsPrice = 50000; // Initial price for the +100/sec upgrade
-    let massiveClickUpgradePrice = 150000; // Initial price for the +500/click upgrade
-    let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
-    let hugeClickUpgradePrice = 500000; // Initial price for the +5000/click upgrade
-    let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
+let score = 0;
+let pointsPerClick = 1;
+let pointsPerSecond = 0;
 
-    
-    const scoreDisplay = document.getElementById('score');
-    const clickMeImage = document.getElementById('clickMe');
-    const buyUpgradeButton = document.getElementById('buyUpgrade');
-    const buyAutoPointsButton = document.getElementById('buyAutoPoints');
-    const bigUpgradeButton = document.getElementById('bigUpgrade');
-    const bigAutoPointsButton = document.getElementById('bigAutoPoints');
-    const massiveClickUpgradeButton = document.getElementById('massiveClickUpgrade');
-    const massiveAutoPointsButton = document.getElementById('massiveAutoPoints');
-    const hugeClickUpgradeButton = document.getElementById('hugeClickUpgrade');
-    const hugeAutoPointsButton = document.getElementById('hugeAutoPoints');
+const scoreDisplay = document.getElementById('score');
+const clickMeImage = document.getElementById('clickMe');
 
-    function updateButtonStyles() {
-        // Updating button texts and affordability colors
-        buyUpgradeButton.innerHTML = `+1 for ${upgradePrice} Points`;
-        buyAutoPointsButton.innerHTML = `Auto +1/sec for ${autoPointsPrice.toFixed(0)} Points`;
-        bigUpgradeButton.innerHTML = `+100 for ${bigUpgradePrice} Points`;
+// List of button IDs in the order they should be unlocked
+const upgradeSequence = [
+    "buyUpgrade", "buyAutoPoints", "bigUpgrade", "bigAutoPoints",
+    "massiveClickUpgrade", "massiveAutoPoints", "hugeClickUpgrade", "hugeAutoPoints"
+];
 
-        buyUpgradeButton.classList.toggle("can-afford", score >= upgradePrice);
-        buyUpgradeButton.classList.toggle("cannot-afford", score < upgradePrice);
-        
-        buyAutoPointsButton.classList.toggle("can-afford", score >= autoPointsPrice);
-        buyAutoPointsButton.classList.toggle("cannot-afford", score < autoPointsPrice);
+// Hide all but the first upgrade button initially
+function initializeButtonVisibility() {
+    upgradeSequence.forEach((buttonId, index) => {
+        const button = document.getElementById(buttonId);
+        if (index > 0) {
+            button.style.display = 'none';
+        } else {
+            button.style.display = 'inline-block';
+        }
+    });
+}
 
-        bigUpgradeButton.classList.toggle("can-afford", score >= bigUpgradePrice);
-        bigUpgradeButton.classList.toggle("cannot-afford", score < bigUpgradePrice);
-
-        bigAutoPointsButton.innerHTML = `+100/sec for ${bigAutoPointsPrice} Points`;
-        bigAutoPointsButton.classList.toggle("can-afford", score >= bigAutoPointsPrice);
-        bigAutoPointsButton.classList.toggle("cannot-afford", score < bigAutoPointsPrice);
-
-        massiveClickUpgradeButton.innerHTML = `+500/click for ${massiveClickUpgradePrice} Points`;
-        massiveClickUpgradeButton.classList.toggle("can-afford", score >= massiveClickUpgradePrice);
-        massiveClickUpgradeButton.classList.toggle("cannot-afford", score < massiveClickUpgradePrice);
-    
-        massiveAutoPointsButton.innerHTML = `+500/sec for ${massiveAutoPointsPrice} Points`;
-        massiveAutoPointsButton.classList.toggle("can-afford", score >= massiveAutoPointsPrice);
-        massiveAutoPointsButton.classList.toggle("cannot-afford", score < massiveAutoPointsPrice);
-        
-        hugeClickUpgradeButton.innerHTML = `+5000/click for ${massiveClickUpgradePrice} Points`;
-        hugeClickUpgradeButton.classList.toggle("can-afford", score >= massiveClickUpgradePrice);
-        hugeClickUpgradeButton.classList.toggle("cannot-afford", score < massiveClickUpgradePrice);
-    
-        hugeAutoPointsButton.innerHTML = `+5000/sec for ${massiveAutoPointsPrice} Points`;
-        hugeAutoPointsButton.classList.toggle("can-afford", score >= massiveAutoPointsPrice);
-        hugeAutoPointsButton.classList.toggle("cannot-afford", score < massiveAutoPointsPrice);
+// Function to show the next upgrade button
+function showNextUpgrade(currentButtonId) {
+    const currentIndex = upgradeSequence.indexOf(currentButtonId);
+    const nextIndex = currentIndex + 1;
+    const nextButtonId = upgradeSequence[nextIndex];
+    if (nextButtonId) {
+        const nextButton = document.getElementById(nextButtonId);
+        nextButton.style.display = 'inline-block';
     }
-   clickMeImage.onclick = function() {
+}
+
+// Modify each upgrade button's onclick function to show the next upgrade
+function modifyButtonActions() {
+    upgradeSequence.forEach(buttonId => {
+        const button = document.getElementById(buttonId);
+        const originalOnClick = button.onclick;
+        button.onclick = function() {
+            const result = originalOnClick.call(this); // Call the original onclick function
+            if (result !== false) { // If the purchase was successful
+                showNextUpgrade(buttonId); // Show the next upgrade button
+            }
+            return result;
+        };
+    });
+}
+
+clickMeImage.onclick = function() {
     score += pointsPerClick;
     updateScoreAndShop();
+};
 
     const fallingImage = document.createElement('img');
     fallingImage.src = 'drake-21-savage-her-loss-album-cver.webp';
@@ -280,7 +273,16 @@
             updateScoreAndShop();
         }
     });
+function updateScoreAndShop() {
+    scoreDisplay.innerHTML = "Score: " + score;
+    // Update button styles as before
+}
 
+document.addEventListener('DOMContentLoaded', function() {
+    initializeButtonVisibility();
+    modifyButtonActions();
+    // Any other initialization code
+});
     function updateScoreAndShop() {
         scoreDisplay.innerHTML = "Score: " + score;
         updateButtonStyles();
