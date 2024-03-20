@@ -36,19 +36,19 @@
     }
     img.clickable-image:active {
         transform: scale(0.9);
-    }
     .falling-image {
-        position: fixed;
-        pointer-events: none; /* Allows clicks to pass through the falling images */
-        opacity: 0.5;
-        animation: fall 3s linear forwards;
-        width: 25px; /* Much smaller falling image */
-        height: auto;
-    }
-    @keyframes fall {
-        from { transform: translateY(-50px); }
-        to { transform: translateY(100vh); }
-    }
+    position: fixed;
+    top: 0px; /* Ensure starting at the top */
+    opacity: 0.5;
+    width: 50px; /* Adjust size as needed */
+    height: auto;
+    pointer-events: none;
+    animation: fall 3s linear forwards;
+}
+@keyframes fall {
+    from { top: 0px; }
+    to { top: 100vh; }
+}
     .can-afford {
         color: green;
     }
@@ -132,29 +132,25 @@
         bigUpgradeButton.classList.toggle("cannot-afford", score < bigUpgradePrice);
     }
 
-    clickMeImage.onclick = function(event) {
+    clickMeImage.onclick = function() {
     score += pointsPerClick;
     updateScoreAndShop();
 
-    // Create and animate falling image
     const fallingImage = document.createElement('img');
-    fallingImage.src = 'drake-21-savage-her-loss-album-cover.webp'; // Set this to your falling image
+    fallingImage.src = 'drake-21-savage-her-loss-album-cover.webp';
     fallingImage.classList.add('falling-image');
-    
-    // Calculate a random horizontal start position
-    const maxWidth = window.innerWidth - 50; // Subtract falling image width to ensure it's fully visible
+
+    const maxWidth = window.innerWidth - 50; // Assuming the image width is about 50px
     const randomLeft = Math.floor(Math.random() * maxWidth);
-    
-    fallingImage.style.left = `${randomLeft}px`; // Set random horizontal position
-    fallingImage.style.top = "0px"; // Start from the top of the screen
-    
+    fallingImage.style.left = `${randomLeft}px`;
+
     document.body.appendChild(fallingImage);
 
-    // Remove the falling image after animation ends
     setTimeout(() => {
         document.body.removeChild(fallingImage);
-    }, 3000); // Matches animation duration
+    }, 3000);
 };
+
 
 
     buyUpgradeButton.onclick = function() {
