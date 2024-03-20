@@ -106,6 +106,7 @@
     <button id="buyUpgrade" class="cannot-afford">+1 for 50 Points</button>
     <button id="buyAutoPoints" class="cannot-afford">Auto +1/sec for 500 Points</button>
     <button id="bigUpgrade" class="cannot-afford">+50 for 10,000 Points</button>
+    <button id="bigAutoPoints" class="cannot-afford">+50/sec for 50,000 Points</button>
 </div>
 
 <div id="game">
@@ -129,12 +130,14 @@
     let upgradePrice = 50;
     let autoPointsPrice = 500;
     let bigUpgradePrice = 10000;
+    let bigAutoPointsPrice = 50000; // Initial price for the +50/sec upgrade
 
     const scoreDisplay = document.getElementById('score');
     const clickMeImage = document.getElementById('clickMe');
     const buyUpgradeButton = document.getElementById('buyUpgrade');
     const buyAutoPointsButton = document.getElementById('buyAutoPoints');
     const bigUpgradeButton = document.getElementById('bigUpgrade');
+    const bigAutoPointsButton = document.getElementById('bigAutoPoints');
 
     function updateButtonStyles() {
         // Updating button texts and affordability colors
@@ -150,8 +153,11 @@
 
         bigUpgradeButton.classList.toggle("can-afford", score >= bigUpgradePrice);
         bigUpgradeButton.classList.toggle("cannot-afford", score < bigUpgradePrice);
-    }
 
+        bigAutoPointsButton.innerHTML = `+50/sec for ${bigAutoPointsPrice} Points`;
+        bigAutoPointsButton.classList.toggle("can-afford", score >= bigAutoPointsPrice);
+        bigAutoPointsButton.classList.toggle("cannot-afford", score < bigAutoPointsPrice);
+    }
    clickMeImage.onclick = function() {
     score += pointsPerClick;
     updateScoreAndShop();
@@ -200,6 +206,14 @@
             updateScoreAndShop();
         }
     };
+    bigAutoPointsButton.addEventListener('click', function() {
+    if (score >= bigAutoPointsPrice) {
+        score -= bigAutoPointsPrice; // Deduct the cost from the score
+        pointsPerSecond += 50; // Increase points per second by 50
+        bigAutoPointsPrice = Math.round(bigAutoPointsPrice * 1.03); // Increase the price by 3%
+        updateScoreAndShop(); // Update the score display and button styles
+    }
+});
 
     function updateScoreAndShop() {
         scoreDisplay.innerHTML = "Score: " + score;
