@@ -109,6 +109,10 @@
     <button id="bigAutoPoints" class="cannot-afford">+100/sec for 50,000 Points</button>
     <button id="massiveClickUpgrade" class="cannot-afford">+500/click for 150,000 Points</button>
     <button id="massiveAutoPoints" class="cannot-afford">+500/sec for 200,000 Points</button>
+    <button id="hugeClickUpgrade" class="cannot-afford">+5,000/click for 500,000 Points</button>
+    <button id="hugeAutoPoints" class="cannot-afford">+5,000/sec for 750,000 Points</button>
+
+
 </div>
 
 <div id="game">
@@ -135,6 +139,9 @@
     let bigAutoPointsPrice = 50000; // Initial price for the +100/sec upgrade
     let massiveClickUpgradePrice = 150000; // Initial price for the +500/click upgrade
     let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
+    let hugeClickUpgrade = 500000; // Initial price for the +5000/click upgrade
+    let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
+
     
     const scoreDisplay = document.getElementById('score');
     const clickMeImage = document.getElementById('clickMe');
@@ -144,6 +151,8 @@
     const bigAutoPointsButton = document.getElementById('bigAutoPoints');
     const massiveClickUpgradeButton = document.getElementById('massiveClickUpgrade');
     const massiveAutoPointsButton = document.getElementById('massiveAutoPoints');
+    const hugeClickUpgradeButton = document.getElementById('hugeClickUpgrade');
+    const hugeAutoPointsButton = document.getElementById('hugeAutoPoints');
 
     function updateButtonStyles() {
         // Updating button texts and affordability colors
@@ -171,6 +180,14 @@
         massiveAutoPointsButton.innerHTML = `+500/sec for ${massiveAutoPointsPrice} Points`;
         massiveAutoPointsButton.classList.toggle("can-afford", score >= massiveAutoPointsPrice);
         massiveAutoPointsButton.classList.toggle("cannot-afford", score < massiveAutoPointsPrice);
+        
+        hugeClickUpgradeButton.innerHTML = `+5000/click for ${massiveClickUpgradePrice} Points`;
+        hugeClickUpgradeButton.classList.toggle("can-afford", score >= massiveClickUpgradePrice);
+        hugeClickUpgradeButton.classList.toggle("cannot-afford", score < massiveClickUpgradePrice);
+    
+        hugeAutoPointsButton.innerHTML = `+5000/sec for ${massiveAutoPointsPrice} Points`;
+        hugeAutoPointsButton.classList.toggle("can-afford", score >= massiveAutoPointsPrice);
+        hugeAutoPointsButton.classList.toggle("cannot-afford", score < massiveAutoPointsPrice);
     }
    clickMeImage.onclick = function() {
     score += pointsPerClick;
@@ -243,6 +260,22 @@
         score -= massiveAutoPointsPrice;
         pointsPerSecond += 500;
         massiveAutoPointsPrice = Math.round(massiveAutoPointsPrice * 1.05);
+        updateScoreAndShop();
+    }
+});
+    hugeClickUpgradeButton.addEventListener('click', function() {
+    if (score >= hugeClickUpgradePrice) {
+        score -= hugeClickUpgradePrice;
+        pointsPerClick += 5000;
+        hugeClickUpgradePrice = Math.round(hugeClickUpgradePrice * 1.05);
+        updateScoreAndShop();
+    }
+});
+    hugeAutoPointsButton.addEventListener('click', function() {
+    if (score >= hugeAutoPointsPrice) {
+        score -= hugeAutoPointsPrice;
+        pointsPerSecond += 500;
+        hugeAutoPointsPrice = Math.round(hugeAutoPointsPrice * 1.05);
         updateScoreAndShop();
     }
 });
