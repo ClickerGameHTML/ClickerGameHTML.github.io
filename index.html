@@ -133,30 +133,24 @@
         bigUpgradeButton.classList.toggle("cannot-afford", score < bigUpgradePrice);
     }
 
-    clickMeImage.onclick = function(event) {
+   clickMeImage.onclick = function() {
     score += pointsPerClick;
     updateScoreAndShop();
 
-    // Create and animate falling image
     const fallingImage = document.createElement('img');
-    fallingImage.src = 'drake-21-savage-her-loss-album-cover.webp'; // Set this to your falling image
+    fallingImage.src = 'drake-21-savage-her-loss-album-cover.webp';
     fallingImage.classList.add('falling-image');
-    
-    // Calculate a random horizontal start position
-    const maxWidth = window.innerWidth - 50; // Subtract falling image width to ensure it's fully visible
+
+    const maxWidth = window.innerWidth - 50; // Assuming the image width is about 50px
     const randomLeft = Math.floor(Math.random() * maxWidth);
-    
-    fallingImage.style.left = `${randomLeft}px`; // Set random horizontal position
-    fallingImage.style.top = "0px"; // Start from the top of the screen
-    
+    fallingImage.style.left = `${randomLeft}px`;
+
     document.body.appendChild(fallingImage);
 
-    // Remove the falling image after animation ends
     setTimeout(() => {
         document.body.removeChild(fallingImage);
-    }, 3000); // Matches animation duration
+    }, 3000);
 };
-
 
 
     buyUpgradeButton.onclick = function() {
