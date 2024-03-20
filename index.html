@@ -36,6 +36,7 @@
     }
     img.clickable-image:active {
         transform: scale(0.9);
+    }
     .falling-image {
     position: fixed;
     top: 0px; /* Ensure starting at the top */
@@ -132,23 +133,28 @@
         bigUpgradeButton.classList.toggle("cannot-afford", score < bigUpgradePrice);
     }
 
-    clickMeImage.onclick = function() {
+    clickMeImage.onclick = function(event) {
     score += pointsPerClick;
     updateScoreAndShop();
 
+    // Create and animate falling image
     const fallingImage = document.createElement('img');
-    fallingImage.src = 'drake-21-savage-her-loss-album-cover.webp';
+    fallingImage.src = 'drake-21-savage-her-loss-album-cover.webp'; // Set this to your falling image
     fallingImage.classList.add('falling-image');
-
-    const maxWidth = window.innerWidth - 50; // Assuming the image width is about 50px
+    
+    // Calculate a random horizontal start position
+    const maxWidth = window.innerWidth - 50; // Subtract falling image width to ensure it's fully visible
     const randomLeft = Math.floor(Math.random() * maxWidth);
-    fallingImage.style.left = `${randomLeft}px`;
-
+    
+    fallingImage.style.left = `${randomLeft}px`; // Set random horizontal position
+    fallingImage.style.top = "0px"; // Start from the top of the screen
+    
     document.body.appendChild(fallingImage);
 
+    // Remove the falling image after animation ends
     setTimeout(() => {
         document.body.removeChild(fallingImage);
-    }, 3000);
+    }, 3000); // Matches animation duration
 };
 
 
