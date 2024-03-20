@@ -20,10 +20,31 @@
         text-align: center;
     }
     #shop {
-        position: absolute;
-        left: 20px;
-        top: 20px;
-    }
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    background-color: #e6cde3; /* Lighter purple background */
+    border: 2px solid #9b72aa; /* Purple border */
+    border-radius: 8px;
+    padding: 10px;
+    z-index: 100; /* Ensure it's above other elements */
+}
+
+#shop button {
+    display: block;
+    margin: 5px 0; /* Spacing between buttons */
+}
+
+#shopToggle {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #d1a9ce; /* Slightly darker purple for contrast */
+    color: #ffffff; /* White text color for readability */
+    border-radius: 8px;
+    border: none;
+}
+
     #score {
         font-size: 24px;
         margin-bottom: 20px;
@@ -102,18 +123,19 @@
 <body>
 
 <div id="shop">
-    <h2>Shop</h2>
-    <button id="buyUpgrade" class="cannot-afford">+1 for 50 Points</button>
-    <button id="buyAutoPoints" class="cannot-afford">Auto +1/sec for 500 Points</button>
-    <button id="bigUpgrade" class="cannot-afford">+100 for 10,000 Points</button>
-    <button id="bigAutoPoints" class="cannot-afford">+100/sec for 50,000 Points</button>
-    <button id="massiveClickUpgrade" class="cannot-afford">+500/click for 150,000 Points</button>
-    <button id="massiveAutoPoints" class="cannot-afford">+500/sec for 200,000 Points</button>
-    <button id="hugeClickUpgrade" class="cannot-afford">+5,000/click for 500,000 Points</button>
-    <button id="hugeAutoPoints" class="cannot-afford">+5,000/sec for 750,000 Points</button>
-
-
+    <button id="shopToggle">Upgrades</button>
+    <div id="upgradeList" style="display: none;">
+        <button id="buyUpgrade" class="cannot-afford">+1 for 50 Points</button>
+        <button id="buyAutoPoints" class="cannot-afford">Auto +1/sec for 500 Points</button>
+        <button id="bigUpgrade" class="cannot-afford">+100 for 10,000 Points</button>
+        <button id="bigAutoPoints" class="cannot-afford">+100/sec for 50,000 Points</button>
+        <button id="massiveClickUpgrade" class="cannot-afford">+500/click for 150,000 Points</button>
+        <button id="massiveAutoPoints" class="cannot-afford">+500/sec for 200,000 Points</button>
+        <button id="hugeClickUpgrade" class="cannot-afford">+5,000/click for 500,000 Points</button>
+        <button id="hugeAutoPoints" class="cannot-afford">+5,000/sec for 750,000 Points</button>
+    </div>
 </div>
+
 
 <div id="game">
     <div id="score">Score: 0</div>
@@ -320,6 +342,15 @@ document.addEventListener('DOMContentLoaded', function() {
             muteButton.textContent = audio.muted ? 'Unmute' : 'Mute';
         }
     });
+});
+
+    document.getElementById('shopToggle').addEventListener('click', function() {
+    var upgradeList = document.getElementById('upgradeList');
+    if (upgradeList.style.display === "none") {
+        upgradeList.style.display = "block";
+    } else {
+        upgradeList.style.display = "none";
+    }
 });
 
 </script>
