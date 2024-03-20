@@ -133,21 +133,29 @@
     }
 
     clickMeImage.onclick = function(event) {
-        score += pointsPerClick;
-        updateScoreAndShop();
+    score += pointsPerClick;
+    updateScoreAndShop();
 
-        // Create and animate falling image
-        const fallingImage = document.createElement('img');
-        fallingImage.src = 'drake-21-savage-her-loss-album-cver.webp'; // Set this to your falling image
-        fallingImage.classList.add('falling-image');
-        fallingImage.style.left = `${event.clientX - 25}px`; // Centers the image where clicked
-        document.body.appendChild(fallingImage);
+    // Create and animate falling image
+    const fallingImage = document.createElement('img');
+    fallingImage.src = 'drake-21-savage-her-loss-album-cover.webp'; // Set this to your falling image
+    fallingImage.classList.add('falling-image');
+    
+    // Calculate a random horizontal start position
+    const maxWidth = window.innerWidth - 50; // Subtract falling image width to ensure it's fully visible
+    const randomLeft = Math.floor(Math.random() * maxWidth);
+    
+    fallingImage.style.left = `${randomLeft}px`; // Set random horizontal position
+    fallingImage.style.top = "0px"; // Start from the top of the screen
+    
+    document.body.appendChild(fallingImage);
 
-        // Remove the falling image after animation ends
-        setTimeout(() => {
-            document.body.removeChild(fallingImage);
-        }, 3000); // Matches animation duration
-    };
+    // Remove the falling image after animation ends
+    setTimeout(() => {
+        document.body.removeChild(fallingImage);
+    }, 3000); // Matches animation duration
+};
+
 
     buyUpgradeButton.onclick = function() {
         if (score >= upgradePrice) {
