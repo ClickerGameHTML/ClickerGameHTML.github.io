@@ -60,8 +60,24 @@
         font-size: 20px;
         cursor: pointer;
         margin-bottom: 10px;
-        border: none;
-        background-color: #f0f0f0;
+        border: 2px solid #9b72aa; /* Purple border */
+        background-color: #e6cde3; /* Lighter purple background */
+        color: #5a3a5b; /* Darker purple text color for contrast */
+        border-radius: 8px; /* Slightly rounded corners for a softer look */
+        transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
+    }
+
+    button:hover {
+        background-color: #d1a9ce; /* Slightly darker purple on hover for interactivity */
+        color: #ffffff; /* White text color on hover for better readability */
+    }
+
+    .can-afford {
+        color: green;
+    }
+
+    .cannot-afford {
+        color: red;
     }
 </style>
 
