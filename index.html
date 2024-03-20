@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Clicker Game with Shop Tab</title>
+    <title>Clicker Game with Upgradeable Shop</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,19 +40,21 @@
 
 <div id="shop">
     <h2>Shop</h2>
-    <button id="buyUpgrade" class="cannot-afford">Buy 2x Click for 50 Points</button>
+    <button id="buyUpgrade" class="cannot-afford">+1 for 50 Points</button>
 </div>
 
 <script>
     let score = 0;
     let pointsPerClick = 1;
+    let upgradePrice = 50;
 
     const scoreDisplay = document.getElementById("score");
     const clickMeButton = document.getElementById("clickMe");
     const buyUpgradeButton = document.getElementById("buyUpgrade");
 
     function updateButtonStyles() {
-        if (score >= 50) {
+        buyUpgradeButton.innerHTML = `+1 for ${upgradePrice.toFixed(0)} Points`; // Update button text with current price
+        if (score >= upgradePrice) {
             buyUpgradeButton.classList.remove("cannot-afford");
             buyUpgradeButton.classList.add("can-afford");
         } else {
@@ -67,9 +69,10 @@
     };
 
     buyUpgradeButton.onclick = function() {
-        if (score >= 50) {
-            score -= 50;
-            pointsPerClick = 2;
+        if (score >= upgradePrice) {
+            score -= upgradePrice;
+            pointsPerClick += 1; // Increase points per click by 1
+            upgradePrice *= 1.02; // Increase the price by 2%
             updateScoreAndShop();
         }
     };
