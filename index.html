@@ -139,7 +139,7 @@
     let bigAutoPointsPrice = 50000; // Initial price for the +100/sec upgrade
     let massiveClickUpgradePrice = 150000; // Initial price for the +500/click upgrade
     let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
-    let hugeClickUpgrade = 500000; // Initial price for the +5000/click upgrade
+    let hugeClickUpgradePrice = 500000; // Initial price for the +5000/click upgrade
     let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
 
     
@@ -263,22 +263,24 @@
         updateScoreAndShop();
     }
 });
-    hugeClickUpgradeButton.addEventListener('click', function() {
-    if (score >= hugeClickUpgradePrice) {
-        score -= hugeClickUpgradePrice;
-        pointsPerClick += 5000;
-        hugeClickUpgradePrice = Math.round(hugeClickUpgradePrice * 1.05);
-        updateScoreAndShop();
-    }
-});
+       hugeClickUpgradeButton.addEventListener('click', function() {
+        if (score >= hugeClickUpgradePrice) { // Ensure variable name consistency
+            score -= hugeClickUpgradePrice;
+            pointsPerClick += 5000;
+            hugeClickUpgradePrice = Math.round(hugeClickUpgradePrice * 1.05); // Correct variable used
+            updateScoreAndShop();
+        }
+    });
+
     hugeAutoPointsButton.addEventListener('click', function() {
-    if (score >= hugeAutoPointsPrice) {
-        score -= hugeAutoPointsPrice;
-        pointsPerSecond += 500;
-        hugeAutoPointsPrice = Math.round(hugeAutoPointsPrice * 1.05);
-        updateScoreAndShop();
-    }
-});
+        if (score >= hugeAutoPointsPrice) {
+            score -= hugeAutoPointsPrice;
+            pointsPerSecond += 5000; // Adjusted to add 5000 points per second
+            hugeAutoPointsPrice = Math.round(hugeAutoPointsPrice * 1.05); // Correct variable used
+            updateScoreAndShop();
+        }
+    });
+
     function updateScoreAndShop() {
         scoreDisplay.innerHTML = "Score: " + score;
         updateButtonStyles();
