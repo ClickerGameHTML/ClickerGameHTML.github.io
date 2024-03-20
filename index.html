@@ -215,19 +215,31 @@
 
     updateScoreAndShop();
 
-const audio = document.querySelector('audio');
-const muteButton = document.getElementById('muteButton');
-
-muteButton.addEventListener('click', function() {
-    // If the audio is paused, play it, and adjust the button text accordingly
+document.addEventListener('DOMContentLoaded', function() {
+    const audio = document.querySelector('audio');
+    const muteButton = document.getElementById('muteButton');
+    
+    // Check if the audio is not already playing (considering autoplay policies)
     if (audio.paused) {
-        audio.play();
-        muteButton.textContent = 'Mute';
+        muteButton.textContent = 'Unmute';
     } else {
-        // Toggle between mute and unmute states
-        audio.muted = !audio.muted;
-        muteButton.textContent = audio.muted ? 'Unmute' : 'Mute';
+        muteButton.textContent = 'Mute';
     }
+
+    muteButton.addEventListener('click', function() {
+        // Check if audio is paused to handle play action
+        if (audio.paused) {
+            audio.play().then(() => {
+                muteButton.textContent = 'Mute';
+            }).catch(error => {
+                console.error("Playback failed:", error);
+            });
+        } else {
+            // Toggle between mute and unmute states
+            audio.muted = !audio.muted;
+            muteButton.textContent = audio.muted ? 'Unmute' : 'Mute';
+        }
+    });
 });
 
 </script>
