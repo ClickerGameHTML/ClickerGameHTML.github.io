@@ -136,61 +136,44 @@
     let upgradePrice = 50;
     let autoPointsPrice = 500;
     let bigUpgradePrice = 10000;
-    let bigAutoPointsPrice = 50000; // Initial price for the +100/sec upgrade
-    let massiveClickUpgradePrice = 150000; // Initial price for the +500/click upgrade
-    let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
-    let hugeClickUpgradePrice = 500000; // Initial price for the +5000/click upgrade
-    let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
+    let bigAutoPointsPrice = 50000;
+    let massiveClickUpgradePrice = 150000;
+    let massiveAutoPointsPrice = 200000;
+    let hugeClickUpgradePrice = 500000;
+    let hugeAutoPointsPrice = 750000;
 
     const scoreDisplay = document.getElementById('score');
     const clickMeImage = document.getElementById('clickMe');
-    const buyUpgradeButton = document.getElementById('buyUpgrade');
-    const buyAutoPointsButton = document.getElementById('buyAutoPoints');
-    const bigUpgradeButton = document.getElementById('bigUpgrade');
-    const bigAutoPointsButton = document.getElementById('bigAutoPoints');
-    const massiveClickUpgradeButton = document.getElementById('massiveClickUpgrade');
-    const massiveAutoPointsButton = document.getElementById('massiveAutoPoints');
-    const hugeClickUpgradeButton = document.getElementById('hugeClickUpgrade');
-    const hugeAutoPointsButton = document.getElementById('hugeAutoPoints');
+    const buttons = document.querySelectorAll('#shop button');
 
-    // Function to initialize all buttons as hidden except the first one
+    // Hide all buttons except the first
     function initializeButtonVisibility() {
-        const buttons = document.querySelectorAll('#shop button:not(:first-child)');
-        buttons.forEach(button => button.style.display = 'none');
+        buttons.forEach((button, index) => {
+            if (index > 0) button.style.display = 'none';
+        });
     }
 
-    // Function to unlock the next upgrade
+    // Show next button
     function unlockNextUpgrade(currentButton) {
         const nextButton = currentButton.nextElementSibling;
         if (nextButton) nextButton.style.display = 'inline-block';
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        initializeButtonVisibility(); // Call this at the start
-        
-        clickMeImage.onclick = function() {
-            score += pointsPerClick;
-            updateScoreAndShop();
-            const fallingImage = document.createElement('img');
-            fallingImage.src = 'drake-21-savage-her-loss-album-cver.webp'; // Make sure the path is correct
-            fallingImage.classList.add('falling-image');
-            const maxWidth = window.innerWidth - 50; // Assuming the image width is about 50px
-            const randomLeft = Math.floor(Math.random() * maxWidth);
-            fallingImage.style.left = `${randomLeft}px`;
-            document.body.appendChild(fallingImage);
-            setTimeout(() => {
-                document.body.removeChild(fallingImage);
-            }, 3000);
-        };
+    // Update the score and shop
+    function updateScoreAndShop() {
+        scoreDisplay.textContent = 'Score: ' + score;
+        // Further updates can be added here
+    }
 
-        // Each button click event now includes a call to unlock the next upgrade
+    // Set click handlers for each upgrade button
+    function setClickHandlers() {
         buyUpgradeButton.onclick = function() {
             if (score >= upgradePrice) {
                 score -= upgradePrice;
                 pointsPerClick += 1;
-                upgradePrice = Math.round(upgradePrice * 1.02);
+                upgradePrice *= 1.02;
+                unlockNextUpgrade(this);
                 updateScoreAndShop();
-                unlockNextUpgrade(this); // Unlock the next upgrade
             }
         };
 
@@ -198,9 +181,9 @@
             if (score >= autoPointsPrice) {
                 score -= autoPointsPrice;
                 pointsPerSecond += 1;
-                autoPointsPrice = Math.round(autoPointsPrice * 1.05);
+                autoPointsPrice *= 1.05;
+                unlockNextUpgrade(this);
                 updateScoreAndShop();
-                unlockNextUpgrade(this); // Unlock the next upgrade
             }
         };
      bigUpgradeButton.onclick = function() {
@@ -263,15 +246,60 @@
         }
     };
 
-    // Function to update button styles and visibility based on score
     function updateButtonStyles() {
-        // Update button styles based on affordability here
-        // This function can be expanded with more conditions as needed
+    // Loop through each button and update its class based on affordability
+    buttons.forEach(button => {
+        // Extract the upgrade price associated with each button
+        const upgradeCost = getUpgradeCost(button.id);
+
+        // Check if the player's score is sufficient to afford this upgrade
+        if (score >= upgradeCost) {
+            button.classList.add("can-afford");
+            button.classList.remove("cannot-afford");
+        } else {
+            button.classList.remove("can-afford");
+            button.classList.add("cannot-afford");
+        }
+    });
+}
+
+function getUpgradeCost(buttonId) {
+    switch(buttonId) {
+        case 'buyUpgrade': return upgradePrice;
+        case 'buyAutoPoints': return autoPointsPrice;
+        case 'bigUpgrade': return bigUpgradePrice;
+        case 'bigAutoPoints': return bigAutoPointsPrice;
+        case 'massiveClickUpgrade': return massiveClickUpgradePrice;
+        case 'massiveAutoPoints': return massiveAutoPointsPrice;
+        case 'hugeClickUpgrade': return hugeClickUpgradePrice;
+        case 'hugeAutoPoints': return hugeAutoPointsPrice;
+        // Add cases for any additional upgrades here
+        default: return Infinity; // A safe fallback
     }
+}
 
     // Call updateScoreAndShop initially to set up the initial button states
     updateScoreAndShop();
 
+        document.addEventListener('DOMContentLoaded', () => {
+        initializeButtonVisibility();
+        setClickHandlers();
+    });
+
+    clickMeImage.onclick = function() {
+        score += pointsPerClick;
+        updateScoreAndShop();
+        const fallingImage = document.createElement('img');
+        fallingImage.src = 'drake-21-savage-her-loss-album-cver.webp'; // Make sure the path is correct
+        fallingImage.classList.add('falling-image');
+        const maxWidth = window.innerWidth - 50; // Assuming the image width is about 50px
+        const randomLeft = Math.floor(Math.random() * maxWidth);
+        fallingImage.style.left = `${randomLeft}px`;
+        document.body.appendChild(fallingImage);
+        setTimeout(() => {
+            document.body.removeChild(fallingImage);
+        }, 3000);
+    };
     // Music mute/unmute handling
     const audio = document.querySelector('audio');
     const muteButton = document.getElementById('muteButton');
