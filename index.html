@@ -130,186 +130,152 @@
 <button id="muteButton" style="position: fixed; bottom: 20px; right: 20px;">Mute</button>
 
 <script>
-let score = 0;
-let pointsPerClick = 1;
-let pointsPerSecond = 0;
+    let score = 0;
+    let pointsPerClick = 1;
+    let pointsPerSecond = 0;
+    let upgradePrice = 50;
+    let autoPointsPrice = 500;
+    let bigUpgradePrice = 10000;
+    let bigAutoPointsPrice = 50000; // Initial price for the +100/sec upgrade
+    let massiveClickUpgradePrice = 150000; // Initial price for the +500/click upgrade
+    let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
+    let hugeClickUpgradePrice = 500000; // Initial price for the +5000/click upgrade
+    let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
 
-const scoreDisplay = document.getElementById('score');
-const clickMeImage = document.getElementById('clickMe');
+    const scoreDisplay = document.getElementById('score');
+    const clickMeImage = document.getElementById('clickMe');
+    const buyUpgradeButton = document.getElementById('buyUpgrade');
+    const buyAutoPointsButton = document.getElementById('buyAutoPoints');
+    const bigUpgradeButton = document.getElementById('bigUpgrade');
+    const bigAutoPointsButton = document.getElementById('bigAutoPoints');
+    const massiveClickUpgradeButton = document.getElementById('massiveClickUpgrade');
+    const massiveAutoPointsButton = document.getElementById('massiveAutoPoints');
+    const hugeClickUpgradeButton = document.getElementById('hugeClickUpgrade');
+    const hugeAutoPointsButton = document.getElementById('hugeAutoPoints');
 
-// List of button IDs in the order they should be unlocked
-const upgradeSequence = [
-    "buyUpgrade", "buyAutoPoints", "bigUpgrade", "bigAutoPoints",
-    "massiveClickUpgrade", "massiveAutoPoints", "hugeClickUpgrade", "hugeAutoPoints"
-];
-
-// Hide all but the first upgrade button initially
-function initializeButtonVisibility() {
-    upgradeSequence.forEach((buttonId, index) => {
-        const button = document.getElementById(buttonId);
-        if (index > 0) {
-            button.style.display = 'none';
-        } else {
-            button.style.display = 'inline-block';
-        }
-    });
-}
-
-// Function to show the next upgrade button
-function showNextUpgrade(currentButtonId) {
-    const currentIndex = upgradeSequence.indexOf(currentButtonId);
-    const nextIndex = currentIndex + 1;
-    const nextButtonId = upgradeSequence[nextIndex];
-    if (nextButtonId) {
-        const nextButton = document.getElementById(nextButtonId);
-        nextButton.style.display = 'inline-block';
+    // Function to initialize all buttons as hidden except the first one
+    function initializeButtonVisibility() {
+        const buttons = document.querySelectorAll('#shop button:not(:first-child)');
+        buttons.forEach(button => button.style.display = 'none');
     }
-}
 
-// Modify each upgrade button's onclick function to show the next upgrade
-function modifyButtonActions() {
-    upgradeSequence.forEach(buttonId => {
-        const button = document.getElementById(buttonId);
-        const originalOnClick = button.onclick;
-        button.onclick = function() {
-            const result = originalOnClick.call(this); // Call the original onclick function
-            if (result !== false) { // If the purchase was successful
-                showNextUpgrade(buttonId); // Show the next upgrade button
-            }
-            return result;
+    // Function to unlock the next upgrade
+    function unlockNextUpgrade(currentButton) {
+        const nextButton = currentButton.nextElementSibling;
+        if (nextButton) nextButton.style.display = 'inline-block';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeButtonVisibility(); // Call this at the start
+        
+        clickMeImage.onclick = function() {
+            score += pointsPerClick;
+            updateScoreAndShop();
+            const fallingImage = document.createElement('img');
+            fallingImage.src = 'drake-21-savage-her-loss-album-cver.webp'; // Make sure the path is correct
+            fallingImage.classList.add('falling-image');
+            const maxWidth = window.innerWidth - 50; // Assuming the image width is about 50px
+            const randomLeft = Math.floor(Math.random() * maxWidth);
+            fallingImage.style.left = `${randomLeft}px`;
+            document.body.appendChild(fallingImage);
+            setTimeout(() => {
+                document.body.removeChild(fallingImage);
+            }, 3000);
         };
-    });
-}
 
-clickMeImage.onclick = function() {
-    score += pointsPerClick;
-    updateScoreAndShop();
-};
+        // Each button click event now includes a call to unlock the next upgrade
+        buyUpgradeButton.onclick = function() {
+            if (score >= upgradePrice) {
+                score -= upgradePrice;
+                pointsPerClick += 1;
+                upgradePrice = Math.round(upgradePrice * 1.02);
+                updateScoreAndShop();
+                unlockNextUpgrade(this); // Unlock the next upgrade
+            }
+        };
 
-    const fallingImage = document.createElement('img');
-    fallingImage.src = 'drake-21-savage-her-loss-album-cver.webp';
-    fallingImage.classList.add('falling-image');
-
-    const maxWidth = window.innerWidth - 50; // Assuming the image width is about 50px
-    const randomLeft = Math.floor(Math.random() * maxWidth);
-    fallingImage.style.left = `${randomLeft}px`;
-
-    document.body.appendChild(fallingImage);
-
-    setTimeout(() => {
-        document.body.removeChild(fallingImage);
-    }, 3000);
-};
-
-
-    buyUpgradeButton.onclick = function() {
-        if (score >= upgradePrice) {
-            score -= upgradePrice;
-            pointsPerClick += 1;
-            upgradePrice = Math.round(upgradePrice * 1.02);
-            updateScoreAndShop();
-        }
-    };
-
-    buyAutoPointsButton.onclick = function() {
-        if (score >= autoPointsPrice) {
-            score -= autoPointsPrice;
-            pointsPerSecond += 1;
-            autoPointsPrice *= 1.05;
-            autoPointsPrice = Math.round(autoPointsPrice);
-            updateScoreAndShop();
-        }
-    };
-
-    bigUpgradeButton.onclick = function() {
+        buyAutoPointsButton.onclick = function() {
+            if (score >= autoPointsPrice) {
+                score -= autoPointsPrice;
+                pointsPerSecond += 1;
+                autoPointsPrice = Math.round(autoPointsPrice * 1.05);
+                updateScoreAndShop();
+                unlockNextUpgrade(this); // Unlock the next upgrade
+            }
+        };
+     bigUpgradeButton.onclick = function() {
         if (score >= bigUpgradePrice) {
             score -= bigUpgradePrice;
             pointsPerClick += 100;
-            bigUpgradePrice *= 1.05;
-            bigUpgradePrice = Math.round(bigUpgradePrice);
+            bigUpgradePrice = Math.round(bigUpgradePrice * 1.05);
             updateScoreAndShop();
+            unlockNextUpgrade(this); // Unlock the next upgrade
         }
     };
-    bigAutoPointsButton.addEventListener('click', function() {
-    if (score >= bigAutoPointsPrice) {
-        score -= bigAutoPointsPrice; // Deduct the cost from the score
-        pointsPerSecond += 100; // Increase points per second by 100
-        bigAutoPointsPrice = Math.round(bigAutoPointsPrice * 1.03); // Increase the price by 3%
-        updateScoreAndShop(); // Update the score display and button styles
-    }
-});
 
-    massiveClickUpgradeButton.addEventListener('click', function() {
-    if (score >= massiveClickUpgradePrice) {
-        score -= massiveClickUpgradePrice;
-        pointsPerClick += 500;
-        massiveClickUpgradePrice = Math.round(massiveClickUpgradePrice * 1.05);
-        updateScoreAndShop();
-    }
-});
+    bigAutoPointsButton.onclick = function() {
+        if (score >= bigAutoPointsPrice) {
+            score -= bigAutoPointsPrice;
+            pointsPerSecond += 100;
+            bigAutoPointsPrice = Math.round(bigAutoPointsPrice * 1.03);
+            updateScoreAndShop();
+            unlockNextUpgrade(this); // Unlock the next upgrade
+        }
+    };
 
-    massiveAutoPointsButton.addEventListener('click', function() {
-    if (score >= massiveAutoPointsPrice) {
-        score -= massiveAutoPointsPrice;
-        pointsPerSecond += 500;
-        massiveAutoPointsPrice = Math.round(massiveAutoPointsPrice * 1.05);
-        updateScoreAndShop();
-    }
-});
-       hugeClickUpgradeButton.addEventListener('click', function() {
-        if (score >= hugeClickUpgradePrice) { // Ensure variable name consistency
+    massiveClickUpgradeButton.onclick = function() {
+        if (score >= massiveClickUpgradePrice) {
+            score -= massiveClickUpgradePrice;
+            pointsPerClick += 500;
+            massiveClickUpgradePrice = Math.round(massiveClickUpgradePrice * 1.05);
+            updateScoreAndShop();
+            unlockNextUpgrade(this); // Unlock the next upgrade
+        }
+    };
+
+    massiveAutoPointsButton.onclick = function() {
+        if (score >= massiveAutoPointsPrice) {
+            score -= massiveAutoPointsPrice;
+            pointsPerSecond += 500;
+            massiveAutoPointsPrice = Math.round(massiveAutoPointsPrice * 1.05);
+            updateScoreAndShop();
+            unlockNextUpgrade(this); // Unlock the next upgrade
+        }
+    };
+
+    hugeClickUpgradeButton.onclick = function() {
+        if (score >= hugeClickUpgradePrice) {
             score -= hugeClickUpgradePrice;
             pointsPerClick += 5000;
-            hugeClickUpgradePrice = Math.round(hugeClickUpgradePrice * 1.05); // Correct variable used
+            hugeClickUpgradePrice = Math.round(hugeClickUpgradePrice * 1.05);
             updateScoreAndShop();
+            unlockNextUpgrade(this); // Unlock the next upgrade
         }
-    });
+    };
 
-    hugeAutoPointsButton.addEventListener('click', function() {
+    hugeAutoPointsButton.onclick = function() {
         if (score >= hugeAutoPointsPrice) {
             score -= hugeAutoPointsPrice;
-            pointsPerSecond += 5000; // Adjusted to add 5000 points per second
-            hugeAutoPointsPrice = Math.round(hugeAutoPointsPrice * 1.05); // Correct variable used
+            pointsPerSecond += 5000;
+            hugeAutoPointsPrice = Math.round(hugeAutoPointsPrice * 1.05);
             updateScoreAndShop();
+            unlockNextUpgrade(this); // Unlock the next upgrade
         }
-    });
-function updateScoreAndShop() {
-    scoreDisplay.innerHTML = "Score: " + score;
-    // Update button styles as before
-}
+    };
 
-document.addEventListener('DOMContentLoaded', function() {
-    initializeButtonVisibility();
-    modifyButtonActions();
-    // Any other initialization code
-});
-    function updateScoreAndShop() {
-        scoreDisplay.innerHTML = "Score: " + score;
-        updateButtonStyles();
+    // Function to update button styles and visibility based on score
+    function updateButtonStyles() {
+        // Update button styles based on affordability here
+        // This function can be expanded with more conditions as needed
     }
 
-    setInterval(function() {
-        if (pointsPerSecond > 0) {
-            score += pointsPerSecond;
-            updateScoreAndShop();
-        }
-    }, 1000); // Automatically increases score every second based on pointsPerSecond
-
+    // Call updateScoreAndShop initially to set up the initial button states
     updateScoreAndShop();
 
-document.addEventListener('DOMContentLoaded', function() {
+    // Music mute/unmute handling
     const audio = document.querySelector('audio');
     const muteButton = document.getElementById('muteButton');
-    
-    // Check if the audio is not already playing (considering autoplay policies)
-    if (audio.paused) {
-        muteButton.textContent = 'Unmute';
-    } else {
-        muteButton.textContent = 'Mute';
-    }
-
     muteButton.addEventListener('click', function() {
-        // Check if audio is paused to handle play action
         if (audio.paused) {
             audio.play().then(() => {
                 muteButton.textContent = 'Mute';
@@ -317,13 +283,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Playback failed:", error);
             });
         } else {
-            // Toggle between mute and unmute states
             audio.muted = !audio.muted;
             muteButton.textContent = audio.muted ? 'Unmute' : 'Mute';
         }
     });
-});
-
 </script>
 
 </body>
