@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Clicker Game with Rounded Upgrade Prices</title>
+    <title>Clicker Game with Automatic Points Upgrade</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,25 +41,33 @@
 <div id="shop">
     <h2>Shop</h2>
     <button id="buyUpgrade" class="cannot-afford">+1 for 50 Points</button>
+    <button id="buyAutoPoints" class="cannot-afford">Auto +1/sec for 500 Points</button>
 </div>
 
 <script>
     let score = 0;
     let pointsPerClick = 1;
+    let pointsPerSecond = 0;
     let upgradePrice = 50;
+    let autoPointsPrice = 500;
 
     const scoreDisplay = document.getElementById("score");
     const clickMeButton = document.getElementById("clickMe");
     const buyUpgradeButton = document.getElementById("buyUpgrade");
+    const buyAutoPointsButton = document.getElementById("buyAutoPoints");
 
     function updateButtonStyles() {
-        buyUpgradeButton.innerHTML = `+1 for ${upgradePrice} Points`; // Update button text with current price
+        buyUpgradeButton.innerHTML = `+1 for ${upgradePrice} Points`;
+        buyAutoPointsButton.innerHTML = `Auto +1/sec for ${autoPointsPrice.toFixed(0)} Points`;
         if (score >= upgradePrice) {
-            buyUpgradeButton.classList.remove("cannot-afford");
             buyUpgradeButton.classList.add("can-afford");
         } else {
             buyUpgradeButton.classList.remove("can-afford");
-            buyUpgradeButton.classList.add("cannot-afford");
+        }
+        if (score >= autoPointsPrice) {
+            buyAutoPointsButton.classList.add("can-afford");
+        } else {
+            buyAutoPointsButton.classList.remove("can-afford");
         }
     }
 
@@ -71,8 +79,18 @@
     buyUpgradeButton.onclick = function() {
         if (score >= upgradePrice) {
             score -= upgradePrice;
-            pointsPerClick += 1; // Increase points per click by 1
-            upgradePrice = Math.round(upgradePrice * 1.08); // Increase the price by 2% and round to nearest whole number
+            pointsPerClick += 1;
+            upgradePrice = Math.round(upgradePrice * 1.05);
+            updateScoreAndShop();
+        }
+    };
+
+    buyAutoPointsButton.onclick = function() {
+        if (score >= autoPointsPrice) {
+            score -= autoPointsPrice;
+            pointsPerSecond += 1;
+            autoPointsPrice *= 1.05;
+            autoPointsPrice = Math.round(autoPointsPrice);
             updateScoreAndShop();
         }
     };
@@ -81,6 +99,14 @@
         scoreDisplay.innerHTML = "Score: " + score;
         updateButtonStyles();
     }
+
+    // Function to automatically increase score based on pointsPerSecond
+    setInterval(function() {
+        if (pointsPerSecond > 0) {
+            score += pointsPerSecond;
+            updateScoreAndShop();
+        }
+    }, 1000); // Executes every 1000 milliseconds (1 second)
 
     // Initial update for the shop status
     updateScoreAndShop();
