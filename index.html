@@ -1,34 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Clicker Game with Shop</title>
+    <title>Clicker Game with Shop Tab</title>
     <style>
         body {
-            text-align: center;
-            margin-top: 50px;
             font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
         }
-        #score, #shop {
+        #game, #shop {
+            margin: 0 20px;
+        }
+        #score {
             font-size: 24px;
-            margin: 20px;
+            margin: 20px 0;
         }
-        #clickMe, #buyUpgrade {
+        button {
             padding: 10px 20px;
             font-size: 20px;
             cursor: pointer;
+            margin-bottom: 10px;
         }
-        #buyUpgrade {
-            display: none; /* Hide button initially */
+        .can-afford {
+            color: green;
+        }
+        .cannot-afford {
+            color: red;
         }
     </style>
 </head>
 <body>
 
-<h2>Clicker Game with Shop</h2>
-<div id="score">Score: 0</div>
-<button id="clickMe">Click me!</button>
+<div id="game">
+    <h2>Clicker Game</h2>
+    <div id="score">Score: 0</div>
+    <button id="clickMe">Click me!</button>
+</div>
+
 <div id="shop">
-    <button id="buyUpgrade">Buy 2x Click for 50 Points</button>
+    <h2>Shop</h2>
+    <button id="buyUpgrade" class="cannot-afford">Buy 2x Click for 50 Points</button>
 </div>
 
 <script>
@@ -39,30 +51,36 @@
     const clickMeButton = document.getElementById("clickMe");
     const buyUpgradeButton = document.getElementById("buyUpgrade");
 
+    function updateButtonStyles() {
+        if (score >= 50) {
+            buyUpgradeButton.classList.remove("cannot-afford");
+            buyUpgradeButton.classList.add("can-afford");
+        } else {
+            buyUpgradeButton.classList.remove("can-afford");
+            buyUpgradeButton.classList.add("cannot-afford");
+        }
+    }
+
     clickMeButton.onclick = function() {
-        score += pointsPerClick; // Increase score by pointsPerClick
-        updateScoreDisplay();
-        checkForUpgrades();
+        score += pointsPerClick;
+        updateScoreAndShop();
     };
 
     buyUpgradeButton.onclick = function() {
         if (score >= 50) {
-            score -= 50; // Deduct 50 points for the upgrade
-            pointsPerClick = 2; // Now each click is worth 2 points
-            buyUpgradeButton.style.display = "none"; // Hide the upgrade button after purchase
-            updateScoreDisplay();
+            score -= 50;
+            pointsPerClick = 2;
+            updateScoreAndShop();
         }
     };
 
-    function updateScoreDisplay() {
-        scoreDisplay.innerHTML = "Score: " + score; // Update score display
+    function updateScoreAndShop() {
+        scoreDisplay.innerHTML = "Score: " + score;
+        updateButtonStyles();
     }
 
-    function checkForUpgrades() {
-        if (score >= 50 && pointsPerClick == 1) {
-            buyUpgradeButton.style.display = "inline"; // Show the upgrade button if the player has 50 points and hasn't bought the upgrade yet
-        }
-    }
+    // Initial update for the shop status
+    updateScoreAndShop();
 </script>
 
 </body>
