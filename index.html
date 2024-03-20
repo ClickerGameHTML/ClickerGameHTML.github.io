@@ -133,6 +133,8 @@
         <button id="massiveAutoPoints" class="cannot-afford">+500/sec for 200,000 Points</button>
         <button id="hugeClickUpgrade" class="cannot-afford">+5,000/click for 500,000 Points</button>
         <button id="hugeAutoPoints" class="cannot-afford">+5,000/sec for 750,000 Points</button>
+        <button id="ultraClickUpgrade" class="cannot-afford">+25,000/click for 2,000,000 Points</button>
+        <button id="ultraAutoPoints" class="cannot-afford">+25,000/sec for 2,500,000 Points</button>
     </div>
 </div>
 
@@ -163,6 +165,8 @@
     let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
     let hugeClickUpgradePrice = 500000; // Initial price for the +5000/click upgrade
     let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
+    let ultraClickUpgradePrice = 2000000; // Initial price for the +25,000/click upgrade
+    let ultraAutoPointsPrice = 2500000; // Initial price for the +25,000/sec upgrade
 
     
     const scoreDisplay = document.getElementById('score');
@@ -175,6 +179,8 @@
     const massiveAutoPointsButton = document.getElementById('massiveAutoPoints');
     const hugeClickUpgradeButton = document.getElementById('hugeClickUpgrade');
     const hugeAutoPointsButton = document.getElementById('hugeAutoPoints');
+    const ultraClickUpgradeButton = document.getElementById('ultraClickUpgrade');
+    const ultraAutoPointsButton = document.getElementById('ultraAutoPoints');
 
     function updateButtonStyles() {
         // Updating button texts and affordability colors
@@ -303,6 +309,23 @@
         }
     });
 
+    ultraClickUpgradeButton.addEventListener('click', function() {
+    if (score >= ultraClickUpgradePrice) {
+        score -= ultraClickUpgradePrice;
+        pointsPerClick += 25000;
+        ultraClickUpgradePrice = Math.round(ultraClickUpgradePrice * 1.05);
+        updateScoreAndShop();
+    }
+});
+
+ultraAutoPointsButton.addEventListener('click', function() {
+    if (score >= ultraAutoPointsPrice) {
+        score -= ultraAutoPointsPrice;
+        pointsPerSecond += 25000;
+        ultraAutoPointsPrice = Math.round(ultraAutoPointsPrice * 1.05);
+        updateScoreAndShop();
+    }
+});
     function updateScoreAndShop() {
         scoreDisplay.innerHTML = "Score: " + score;
         updateButtonStyles();
