@@ -3,7 +3,7 @@
 <head>
     <title>American Dream Clicker</title>
     <style>
-    body {
+     body {
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
@@ -12,8 +12,27 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        /* Gradient background from light gray to a darker shade */
-        background: linear-gradient(to right, #f0f0f0 0%, #d4d4d4 50%, #8B4513 75%, #000000 100%);
+        background: linear-gradient(270deg, #f0f0f0, #d4d4d4, #8B4513, #000000);
+        background-size: 800% 800%;
+        -webkit-animation: AnimationName 30s ease infinite;
+        -moz-animation: AnimationName 30s ease infinite;
+        animation: AnimationName 30s ease infinite;
+    }
+
+    @-webkit-keyframes AnimationName {
+        0%{background-position:0% 50%}
+        50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
+    }
+    @-moz-keyframes AnimationName {
+        0%{background-position:0% 50%}
+        50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
+    }
+    @keyframes AnimationName { 
+        0%{background-position:0% 50%}
+        50%{background-position:100% 50%}
+        100%{background-position:0% 50%}
     }
     #game {
         flex-grow: 1;
