@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Advanced Clicker Game with Upgrades</title>
+    <title>Her Loss Clicker</title>
     <style>
     body {
         font-family: Arial, sans-serif;
@@ -20,30 +20,41 @@
         text-align: center;
     }
     #shop {
-    position: fixed;
+    position: absolute;
     left: 20px;
     top: 20px;
-    background-color: #e6cde3; /* Lighter purple background */
-    border: 2px solid #9b72aa; /* Purple border */
-    border-radius: 8px;
-    padding: 10px;
-    z-index: 100; /* Ensure it's above other elements */
-}
-
-#shop button {
-    display: block;
-    margin: 5px 0; /* Spacing between buttons */
+    display: flex;
+    flex-direction: column;
 }
 
 #shopToggle {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #d1a9ce; /* Slightly darker purple for contrast */
-    color: #ffffff; /* White text color for readability */
-    border-radius: 8px;
-    border: none;
+    border: 2px solid #9b72aa; /* Purple border */
+    background-color: #e6cde3; /* Lighter purple background */
+    color: #5a3a5b; /* Darker purple text color for contrast */
+    border-radius: 8px; /* Slightly rounded corners for a softer look */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
 }
+
+#shopToggle:hover {
+    background-color: #d1a9ce; /* Slightly darker purple on hover for interactivity */
+    color: #ffffff; /* White text color on hover for better readability */
+}
+
+#upgradeList {
+    display: none;
+    max-height: 400px; /* Adjust based on your preference */
+    overflow-y: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid #9b72aa;
+    padding: 10px;
+    background-color: #e6cde3; /* Lighter purple background */
+}
+
+
 
     #score {
         font-size: 24px;
@@ -137,6 +148,9 @@
         <button id="ultraAutoPoints" class="cannot-afford">+25,000/sec for 2,500,000 Points</button>
         <button id="megaClickUpgrade" class="cannot-afford">+100,000/click for 10,000,000 Points</button>
         <button id="megaAutoPoints" class="cannot-afford">+100,000/sec for 12,500,000 Points</button>
+        <button id="quarterMillionClickUpgrade" class="cannot-afford">+250,000/click for 50,000,000 Points</button>
+        <button id="quarterMillionAutoPoints" class="cannot-afford">+250,000/sec for 75,000,000 Points</button>
+
 
     </div>
 </div>
@@ -158,37 +172,44 @@
 
 <script>
     let score = 0;
-    let pointsPerClick = 1;
-    let pointsPerSecond = 0;
-    let upgradePrice = 50;
-    let autoPointsPrice = 500;
-    let bigUpgradePrice = 10000;
-    let bigAutoPointsPrice = 50000; // Initial price for the +100/sec upgrade
-    let massiveClickUpgradePrice = 150000; // Initial price for the +500/click upgrade
-    let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
-    let hugeClickUpgradePrice = 500000; // Initial price for the +5000/click upgrade
-    let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
-    let ultraClickUpgradePrice = 2000000; // Initial price for the +25,000/click upgrade
-    let ultraAutoPointsPrice = 2500000; // Initial price for the +25,000/sec upgrade
-    let megaClickUpgradePrice = 10000000; // Initial price for the +100,000/click upgrade
-    let megaAutoPointsPrice = 12500000; // Initial price for the +100,000/sec upgrade
+let pointsPerClick = 1;
+let pointsPerSecond = 0;
+let upgradePrice = 50;
+let autoPointsPrice = 500;
+let bigUpgradePrice = 10000;
+let bigAutoPointsPrice = 50000; // Initial price for the +100/sec upgrade
+let massiveClickUpgradePrice = 150000; // Initial price for the +500/click upgrade
+let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
+let hugeClickUpgradePrice = 500000; // Initial price for the +5000/click upgrade
+let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
+let ultraClickUpgradePrice = 2000000; // Initial price for the +25,000/click upgrade
+let ultraAutoPointsPrice = 2500000; // Initial price for the +25,000/sec upgrade
+let megaClickUpgradePrice = 10000000; // Initial price for the +100,000/click upgrade
+let megaAutoPointsPrice = 12500000; // Initial price for the +100,000/sec upgrade
+let quarterMillionClickUpgradePrice = 50000000; // Initial price for the +250,000/click upgrade
+let quarterMillionAutoPointsPrice = 75000000; // Initial price for the +250,000/sec upgrade
 
+const scoreDisplay = document.getElementById('score');
+const clickMeImage = document.getElementById('clickMe');
+const buyUpgradeButton = document.getElementById('buyUpgrade');
+const buyAutoPointsButton = document.getElementById('buyAutoPoints');
+const bigUpgradeButton = document.getElementById('bigUpgrade');
+const bigAutoPointsButton = document.getElementById('bigAutoPoints');
+const massiveClickUpgradeButton = document.getElementById('massiveClickUpgrade');
+const massiveAutoPointsButton = document.getElementById('massiveAutoPoints');
+const hugeClickUpgradeButton = document.getElementById('hugeClickUpgrade');
+const hugeAutoPointsButton = document.getElementById('hugeAutoPoints');
+const ultraClickUpgradeButton = document.getElementById('ultraClickUpgrade');
+const ultraAutoPointsButton = document.getElementById('ultraAutoPoints');
+const megaClickUpgradeButton = document.getElementById('megaClickUpgrade');
+const megaAutoPointsButton = document.getElementById('megaAutoPoints');
+const quarterMillionClickUpgradeButton = document.getElementById('quarterMillionClickUpgrade');
+const quarterMillionAutoPointsButton = document.getElementById('quarterMillionAutoPoints');
+const shopToggle = document.getElementById('shopToggle');
+const upgradeList = document.getElementById('upgradeList');
+const audio = document.querySelector('audio');
+const muteButton = document.getElementById('muteButton');
     
-    const scoreDisplay = document.getElementById('score');
-    const clickMeImage = document.getElementById('clickMe');
-    const buyUpgradeButton = document.getElementById('buyUpgrade');
-    const buyAutoPointsButton = document.getElementById('buyAutoPoints');
-    const bigUpgradeButton = document.getElementById('bigUpgrade');
-    const bigAutoPointsButton = document.getElementById('bigAutoPoints');
-    const massiveClickUpgradeButton = document.getElementById('massiveClickUpgrade');
-    const massiveAutoPointsButton = document.getElementById('massiveAutoPoints');
-    const hugeClickUpgradeButton = document.getElementById('hugeClickUpgrade');
-    const hugeAutoPointsButton = document.getElementById('hugeAutoPoints');
-    const ultraClickUpgradeButton = document.getElementById('ultraClickUpgrade');
-    const ultraAutoPointsButton = document.getElementById('ultraAutoPoints');
-    const megaClickUpgradeButton = document.getElementById('megaClickUpgrade');
-    const megaAutoPointsButton = document.getElementById('megaAutoPoints');
-
     function updateButtonStyles() {
         // Updating button texts and affordability colors
         buyUpgradeButton.innerHTML = `+1 for ${upgradePrice} Points`;
@@ -239,11 +260,23 @@
         megaAutoPointsButton.innerHTML = `+100,000/sec for ${megaAutoPointsPrice} Points`;
         megaAutoPointsButton.classList.toggle("can-afford", score >= megaAutoPointsPrice);
         megaAutoPointsButton.classList.toggle("cannot-afford", score < megaAutoPointsPrice);
-}
-   clickMeImage.onclick = function() {
-    score += pointsPerClick;
-    updateScoreAndShop();
 
+        quarterMillionClickUpgradeButton.innerHTML = `+250,000/click for ${quarterMillionClickUpgradePrice} Points`;
+        quarterMillionClickUpgradeButton.classList.toggle("can-afford", score >= quarterMillionClickUpgradePrice);
+        quarterMillionClickUpgradeButton.classList.toggle("cannot-afford", score < quarterMillionClickUpgradePrice);
+
+        quarterMillionAutoPointsButton.innerHTML = `+250,000/sec for ${quarterMillionAutoPointsPrice} Points`;
+        quarterMillionAutoPointsButton.classList.toggle("can-afford", score >= quarterMillionAutoPointsPrice);
+        quarterMillionAutoPointsButton.classList.toggle("cannot-afford", score < quarterMillionAutoPointsPrice);
+}
+   function updateScoreAndShop() {
+    scoreDisplay.innerHTML = "Score: " + score;
+    updateButtonStyles();
+}
+
+clickMeImage.onclick = function() {
+    score += pointsPerClick;
+    updateScoreAndShop() 
     const fallingImage = document.createElement('img');
     fallingImage.src = 'drake-21-savage-her-loss-album-cver.webp';
     fallingImage.classList.add('falling-image');
@@ -367,25 +400,42 @@ megaAutoPointsButton.addEventListener('click', function() {
         updateScoreAndShop();
     }
 });
+
+    quarterMillionClickUpgradeButton.addEventListener('click', function() {
+        if (score >= quarterMillionClickUpgradePrice) {
+            score -= quarterMillionClickUpgradePrice;
+            pointsPerClick += 250000; // Increase points per click by 250,000
+            quarterMillionClickUpgradePrice = Math.round(quarterMillionClickUpgradePrice * 1.05); // Increase price by 5% for next purchase
+            updateScoreAndShop(); // Update the score and button states
+        }
+    });
+
+    quarterMillionAutoPointsButton.addEventListener('click', function() {
+        if (score >= quarterMillionAutoPointsPrice) {
+            score -= quarterMillionAutoPointsPrice;
+            pointsPerSecond += 250000; // Increase points per second by 250,000
+            quarterMillionAutoPointsPrice = Math.round(quarterMillionAutoPointsPrice * 1.05); // Increase price by 5% for next purchase
+            updateScoreAndShop(); // Update the score and button states
+        }
+    });
     function updateScoreAndShop() {
         scoreDisplay.innerHTML = "Score: " + score;
         updateButtonStyles();
     }
 
-    setInterval(function() {
-        if (pointsPerSecond > 0) {
-            score += pointsPerSecond;
-            updateScoreAndShop();
+    document.addEventListener('DOMContentLoaded', function() {
+    // Toggle upgrade list visibility
+    shopToggle.addEventListener('click', function() {
+        if (upgradeList.style.display === "none") {
+            upgradeList.style.display = "block";
+            shopToggle.textContent = "Hide Upgrades";
+        } else {
+            upgradeList.style.display = "none";
+            shopToggle.textContent = "Upgrades";
         }
-    }, 1000); // Automatically increases score every second based on pointsPerSecond
+    });
 
-    updateScoreAndShop();
-
-document.addEventListener('DOMContentLoaded', function() {
-    const audio = document.querySelector('audio');
-    const muteButton = document.getElementById('muteButton');
-    
-    // Check if the audio is not already playing (considering autoplay policies)
+    // Mute button functionality
     if (audio.paused) {
         muteButton.textContent = 'Unmute';
     } else {
@@ -393,7 +443,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     muteButton.addEventListener('click', function() {
-        // Check if audio is paused to handle play action
         if (audio.paused) {
             audio.play().then(() => {
                 muteButton.textContent = 'Mute';
@@ -401,20 +450,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Playback failed:", error);
             });
         } else {
-            // Toggle between mute and unmute states
             audio.muted = !audio.muted;
             muteButton.textContent = audio.muted ? 'Unmute' : 'Mute';
         }
     });
-});
 
-    document.getElementById('shopToggle').addEventListener('click', function() {
-    var upgradeList = document.getElementById('upgradeList');
-    if (upgradeList.style.display === "none") {
-        upgradeList.style.display = "block";
-    } else {
-        upgradeList.style.display = "none";
-    }
+    setInterval(function() {
+        if (pointsPerSecond > 0) {
+            score += pointsPerSecond;
+            updateScoreAndShop();
+        }
+    }, 1000); // Automatically increases score every second based on pointsPerSecond
 });
 
 </script>
