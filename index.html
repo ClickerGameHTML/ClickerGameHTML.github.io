@@ -4,48 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALBUM CLICKER</title>
-</head>
-<style>
-    body, html {
-        height: 100%;
-        margin: 0;
-        overflow: hidden;
-    }
-    body {
-        animation: moveGradient 5s infinite alternate;
-        background: linear-gradient(60deg, #1e1e1e, #0a0a0a, #FFFFFF);
-        background-size: 200% 200%;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-    }
-    @keyframes moveGradient {
-        0% {
-            background-position: 0% 50%;
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
         }
-        100% {
-            background-position: 100% 50%;
+        body {
+            animation: moveGradient 5s infinite alternate;
+            background: linear-gradient(60deg, #1e1e1e, #0a0a0a, #FFFFFF);
+            background-size: 200% 200%;
+            display: flex;
+            flex-direction: column; /* Changed to column to stack vertically */
+            justify-content: flex-start; /* Aligns content to the start of the container */
         }
-    }
-    h1 {
+        @keyframes moveGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+        .title {
+            text-align: center; /* Centers h1 text horizontally */
+            width: 100%; /* Ensures full width */
+            margin-top: 50px; /* Adds space at the top */
+        }
+        .title h1 {
             color: white; /* Specifically makes h1 text color white */
-    }
-</style>
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1; /* Allows container to take up available space */
+        }
+        .image-container div {
+            margin: 10px; /* Adds some spacing around each image */
+        }
+    </style>
+</head>
 <body>
-    <h1>Album Clicker: Choose your album</h1>
-    <br>
-    <br>
-    <div>
-        <br>
-        <a href="/HerLoss/index.html">
-            <img src="/HerLoss/drake-21-savage-her-loss-album-cver.webp" alt="Her Loss Clicker" style="width:200px;">
-        </a>
+    <div class="title">
+        <h1>Album Clicker: Choose your album</h1>
     </div>
-    <div>
-        <a href="/AmericanDream/index.html">
-            <img src="/AmericanDream/americandream.jpg" alt="Description of Image 2" style="width:200px;">
-        </a>
+    <div class="image-container">
+        <div>
+            <a href="/HerLoss/index.html">
+                <img src="/HerLoss/drake-21-savage-her-loss-album-cver.webp" alt="Her Loss Clicker" style="width:200px;">
+            </a>
+        </div>
+        <div>
+            <a href="/AmericanDream/index.html">
+                <img src="/AmericanDream/americandream.jpg" alt="Description of Image 2" style="width:200px;">
+            </a>
+        </div>
     </div>
 </body>
 </html>
