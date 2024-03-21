@@ -172,42 +172,44 @@
 
 <script>
     let score = 0;
-    let pointsPerClick = 1;
-    let pointsPerSecond = 0;
-    let upgradePrice = 50;
-    let autoPointsPrice = 500;
-    let bigUpgradePrice = 10000;
-    let bigAutoPointsPrice = 50000; // Initial price for the +100/sec upgrade
-    let massiveClickUpgradePrice = 150000; // Initial price for the +500/click upgrade
-    let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
-    let hugeClickUpgradePrice = 500000; // Initial price for the +5000/click upgrade
-    let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
-    let ultraClickUpgradePrice = 2000000; // Initial price for the +25,000/click upgrade
-    let ultraAutoPointsPrice = 2500000; // Initial price for the +25,000/sec upgrade
-    let megaClickUpgradePrice = 10000000; // Initial price for the +100,000/click upgrade
-    let megaAutoPointsPrice = 12500000; // Initial price for the +100,000/sec upgrade
-    let quarterMillionClickUpgradePrice = 50000000; // Initial price for the +250,000/click upgrade
-    let quarterMillionAutoPointsPrice = 75000000; // Initial price for the +250,000/sec upgrade
+let pointsPerClick = 1;
+let pointsPerSecond = 0;
+let upgradePrice = 50;
+let autoPointsPrice = 500;
+let bigUpgradePrice = 10000;
+let bigAutoPointsPrice = 50000; // Initial price for the +100/sec upgrade
+let massiveClickUpgradePrice = 150000; // Initial price for the +500/click upgrade
+let massiveAutoPointsPrice = 200000; // Initial price for the +500/sec upgrade
+let hugeClickUpgradePrice = 500000; // Initial price for the +5000/click upgrade
+let hugeAutoPointsPrice = 750000; // Initial price for the +5000/sec upgrade
+let ultraClickUpgradePrice = 2000000; // Initial price for the +25,000/click upgrade
+let ultraAutoPointsPrice = 2500000; // Initial price for the +25,000/sec upgrade
+let megaClickUpgradePrice = 10000000; // Initial price for the +100,000/click upgrade
+let megaAutoPointsPrice = 12500000; // Initial price for the +100,000/sec upgrade
+let quarterMillionClickUpgradePrice = 50000000; // Initial price for the +250,000/click upgrade
+let quarterMillionAutoPointsPrice = 75000000; // Initial price for the +250,000/sec upgrade
 
+const scoreDisplay = document.getElementById('score');
+const clickMeImage = document.getElementById('clickMe');
+const buyUpgradeButton = document.getElementById('buyUpgrade');
+const buyAutoPointsButton = document.getElementById('buyAutoPoints');
+const bigUpgradeButton = document.getElementById('bigUpgrade');
+const bigAutoPointsButton = document.getElementById('bigAutoPoints');
+const massiveClickUpgradeButton = document.getElementById('massiveClickUpgrade');
+const massiveAutoPointsButton = document.getElementById('massiveAutoPoints');
+const hugeClickUpgradeButton = document.getElementById('hugeClickUpgrade');
+const hugeAutoPointsButton = document.getElementById('hugeAutoPoints');
+const ultraClickUpgradeButton = document.getElementById('ultraClickUpgrade');
+const ultraAutoPointsButton = document.getElementById('ultraAutoPoints');
+const megaClickUpgradeButton = document.getElementById('megaClickUpgrade');
+const megaAutoPointsButton = document.getElementById('megaAutoPoints');
+const quarterMillionClickUpgradeButton = document.getElementById('quarterMillionClickUpgrade');
+const quarterMillionAutoPointsButton = document.getElementById('quarterMillionAutoPoints');
+const shopToggle = document.getElementById('shopToggle');
+const upgradeList = document.getElementById('upgradeList');
+const audio = document.querySelector('audio');
+const muteButton = document.getElementById('muteButton');
     
-    const scoreDisplay = document.getElementById('score');
-    const clickMeImage = document.getElementById('clickMe');
-    const buyUpgradeButton = document.getElementById('buyUpgrade');
-    const buyAutoPointsButton = document.getElementById('buyAutoPoints');
-    const bigUpgradeButton = document.getElementById('bigUpgrade');
-    const bigAutoPointsButton = document.getElementById('bigAutoPoints');
-    const massiveClickUpgradeButton = document.getElementById('massiveClickUpgrade');
-    const massiveAutoPointsButton = document.getElementById('massiveAutoPoints');
-    const hugeClickUpgradeButton = document.getElementById('hugeClickUpgrade');
-    const hugeAutoPointsButton = document.getElementById('hugeAutoPoints');
-    const ultraClickUpgradeButton = document.getElementById('ultraClickUpgrade');
-    const ultraAutoPointsButton = document.getElementById('ultraAutoPoints');
-    const megaClickUpgradeButton = document.getElementById('megaClickUpgrade');
-    const megaAutoPointsButton = document.getElementById('megaAutoPoints');
-    const quarterMillionClickUpgradeButton = document.getElementById('quarterMillionClickUpgrade');
-    const quarterMillionAutoPointsButton = document.getElementById('quarterMillionAutoPoints');
-
-
     function updateButtonStyles() {
         // Updating button texts and affordability colors
         buyUpgradeButton.innerHTML = `+1 for ${upgradePrice} Points`;
@@ -258,11 +260,23 @@
         megaAutoPointsButton.innerHTML = `+100,000/sec for ${megaAutoPointsPrice} Points`;
         megaAutoPointsButton.classList.toggle("can-afford", score >= megaAutoPointsPrice);
         megaAutoPointsButton.classList.toggle("cannot-afford", score < megaAutoPointsPrice);
-}
-   clickMeImage.onclick = function() {
-    score += pointsPerClick;
-    updateScoreAndShop();
 
+        quarterMillionClickUpgradeButton.innerHTML = `+250,000/click for ${quarterMillionClickUpgradePrice} Points`;
+        quarterMillionClickUpgradeButton.classList.toggle("can-afford", score >= quarterMillionClickUpgradePrice);
+        quarterMillionClickUpgradeButton.classList.toggle("cannot-afford", score < quarterMillionClickUpgradePrice);
+
+        quarterMillionAutoPointsButton.innerHTML = `+250,000/sec for ${quarterMillionAutoPointsPrice} Points`;
+        quarterMillionAutoPointsButton.classList.toggle("can-afford", score >= quarterMillionAutoPointsPrice);
+        quarterMillionAutoPointsButton.classList.toggle("cannot-afford", score < quarterMillionAutoPointsPrice);
+}
+   function updateScoreAndShop() {
+    scoreDisplay.innerHTML = "Score: " + score;
+    updateButtonStyles();
+}
+
+clickMeImage.onclick = function() {
+    score += pointsPerClick;
+    updateScoreAndShop() 
     const fallingImage = document.createElement('img');
     fallingImage.src = 'drake-21-savage-her-loss-album-cver.webp';
     fallingImage.classList.add('falling-image');
@@ -410,21 +424,7 @@ megaAutoPointsButton.addEventListener('click', function() {
         updateButtonStyles();
     }
 
-    setInterval(function() {
-        if (pointsPerSecond > 0) {
-            score += pointsPerSecond;
-            updateScoreAndShop();
-        }
-    }, 1000); // Automatically increases score every second based on pointsPerSecond
-
-    updateScoreAndShop();
-
-document.addEventListener('DOMContentLoaded', function() {
-    const shopToggle = document.getElementById('shopToggle');
-    const upgradeList = document.getElementById('upgradeList');
-    const audio = document.querySelector('audio');
-    const muteButton = document.getElementById('muteButton');
-    
+    document.addEventListener('DOMContentLoaded', function() {
     // Toggle upgrade list visibility
     shopToggle.addEventListener('click', function() {
         if (upgradeList.style.display === "none") {
@@ -436,7 +436,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Check if the audio is not already playing (considering autoplay policies)
+    // Mute button functionality
     if (audio.paused) {
         muteButton.textContent = 'Unmute';
     } else {
@@ -444,7 +444,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     muteButton.addEventListener('click', function() {
-        // Check if audio is paused to handle play action
         if (audio.paused) {
             audio.play().then(() => {
                 muteButton.textContent = 'Mute';
@@ -452,11 +451,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error("Playback failed:", error);
             });
         } else {
-            // Toggle between mute and unmute states
             audio.muted = !audio.muted;
             muteButton.textContent = audio.muted ? 'Unmute' : 'Mute';
         }
     });
+
+    setInterval(function() {
+        if (pointsPerSecond > 0) {
+            score += pointsPerSecond;
+            updateScoreAndShop();
+        }
+    }, 1000); // Automatically increases score every second based on pointsPerSecond
 });
 
 </script>
