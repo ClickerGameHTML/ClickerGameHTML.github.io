@@ -158,12 +158,12 @@
 
 <div id="game">
     <div id="score">Score: 0</div>
-    <img src='drake-21-savage-her-loss-album-cver.webp'; alt="Clickable" class="clickable-image" id="clickMe">
+    <img src='HerLoss/drake-21-savage-her-loss-album-cver.webp'; alt="Clickable" class="clickable-image" id="clickMe">
 </div>
 
 <!-- Background music -->
 <audio loop autoplay muted>
-    <source src="CircoLoco.mp3" type="audio/mpeg">
+    <source src="HerLoss/CircoLoco.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
 
@@ -278,7 +278,7 @@ clickMeImage.onclick = function() {
     score += pointsPerClick;
     updateScoreAndShop() 
     const fallingImage = document.createElement('img');
-    fallingImage.src = 'drake-21-savage-her-loss-album-cver.webp';
+    fallingImage.src = 'HerLoss/drake-21-savage-her-loss-album-cver.webp';
     fallingImage.classList.add('falling-image');
 
     const maxWidth = window.innerWidth - 50; // Assuming the image width is about 50px
