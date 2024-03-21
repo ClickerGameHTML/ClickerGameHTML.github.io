@@ -20,34 +20,40 @@
         text-align: center;
     }
     #shop {
-    position: fixed;
+    position: absolute;
     left: 20px;
     top: 20px;
-    width: 200px; /* Set a fixed width */
-    max-height: 90vh; /* Set a maximum height to ensure it doesn't exceed the viewport */
-    overflow-y: auto; /* Enable vertical scrolling */
-    background-color: #e6cde3; /* Lighter purple background */
-    border: 2px solid #9b72aa; /* Purple border */
-    border-radius: 8px;
-    padding: 10px;
-    z-index: 100; /* Ensure it's above other elements */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for better depth */
-}
-
-#shop button {
-    display: block;
-    margin: 5px 0; /* Spacing between buttons */
+    display: flex;
+    flex-direction: column;
 }
 
 #shopToggle {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #d1a9ce; /* Slightly darker purple for contrast */
-    color: #ffffff; /* White text color for readability */
-    border-radius: 8px;
-    border: none;
+    border: 2px solid #9b72aa; /* Purple border */
+    background-color: #e6cde3; /* Lighter purple background */
+    color: #5a3a5b; /* Darker purple text color for contrast */
+    border-radius: 8px; /* Slightly rounded corners for a softer look */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effect */
 }
+
+#shopToggle:hover {
+    background-color: #d1a9ce; /* Slightly darker purple on hover for interactivity */
+    color: #ffffff; /* White text color on hover for better readability */
+}
+
+#upgradeList {
+    display: none;
+    max-height: 400px; /* Adjust based on your preference */
+    overflow-y: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 2px solid #9b72aa;
+    padding: 10px;
+    background-color: #e6cde3; /* Lighter purple background */
+}
+
 
 
     #score {
@@ -414,6 +420,27 @@ megaAutoPointsButton.addEventListener('click', function() {
     updateScoreAndShop();
 
 document.addEventListener('DOMContentLoaded', function() {
+    const shopToggle = document.getElementById('shopToggle');
+    const upgradeList = document.getElementById('upgradeList');
+    const audio = document.querySelector('audio');
+    const muteButton = document.getElementById('muteButton');
+    
+    // Toggle upgrade list visibility
+    shopToggle.addEventListener('click', function() {
+        if (upgradeList.style.display === "none") {
+            upgradeList.style.display = "block";
+            shopToggle.textContent = "Hide Upgrades";
+        } else {
+            upgradeList.style.display = "none";
+            shopToggle.textContent = "Upgrades";
+        }
+    });
+
+    // Existing code for the mute button...
+});
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
     const audio = document.querySelector('audio');
     const muteButton = document.getElementById('muteButton');
     
