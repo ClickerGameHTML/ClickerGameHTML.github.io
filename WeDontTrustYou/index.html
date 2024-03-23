@@ -474,6 +474,50 @@ megaAutoPointsButton.addEventListener('click', function() {
         }
     });
 
+
+    const playlist = [
+        "songs/Young Metro.mp3",
+        "songs/Ain't No Love.mp3",
+        "songs/Cinderella.mp3",
+        "songs/Claustrophobic.mp3",
+        "songs/Everyday Hustle",
+        "songs/Fried (She a Vibe).mp3",
+        "songs/GTA.mp3",
+        "songs/Ice Attack.mp3",
+        "songs/Magic Don Juan (Princess Diana).mp3",
+        "songs/Runnin Outta Time.mp3",
+        "songs/Seen it All.mp3",
+        "songs/Slimed In.mp3",
+        "songs/Type Shit.mp3",
+        "songs/We Don't Trust You.mp3",
+        "songs/Where My Twin @ - Bonus.mp3",
+        "songs/WTFYM.mp3",
+    ];
+
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const muteButton = document.getElementById('muteButton');
+
+    function playRandomSong() {
+        const randomIndex = Math.floor(Math.random() * playlist.length);
+        backgroundMusic.src = playlist[randomIndex];
+        backgroundMusic.play();
+    }
+
+    backgroundMusic.addEventListener('ended', playRandomSong);
+
+    muteButton.addEventListener('click', function() {
+        if (backgroundMusic.paused) {
+            backgroundMusic.play().then(() => {
+                muteButton.textContent = 'Mute';
+            }).catch(error => {
+                console.error("Playback failed:", error);
+            });
+        } else {
+            backgroundMusic.muted = !backgroundMusic.muted;
+            muteButton.textContent = backgroundMusic.muted ? 'Unmute' : 'Mute';
+        }
+    });
+
     setInterval(function() {
         if (pointsPerSecond > 0) {
             score += pointsPerSecond;
