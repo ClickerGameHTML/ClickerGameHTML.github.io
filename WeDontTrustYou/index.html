@@ -478,8 +478,15 @@ megaAutoPointsButton.addEventListener('click', function() {
      // Assuming 'backgroundMusic' is the correct ID for your <audio> element.
         const backgroundMusic = document.getElementById('backgroundMusic'); // Ensure this ID matches your <audio> element's ID.
 
+            let currentSongIndex = -1; // Initialize with an invalid index.
+
 function playRandomSong() {
-    const randomIndex = Math.floor(Math.random() * playlist.length);
+    let randomIndex;
+    do {
+        randomIndex = Math.floor(Math.random() * playlist.length);
+    } while(playlist.length > 1 && randomIndex === currentSongIndex); // Avoid repeating the same song if there are multiple options.
+    currentSongIndex = randomIndex; // Update the current song index.
+
     backgroundMusic.src = playlist[randomIndex];
     backgroundMusic.play();
 }
