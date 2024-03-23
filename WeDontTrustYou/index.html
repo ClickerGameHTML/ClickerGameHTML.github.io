@@ -181,11 +181,10 @@
 </div>
 
 <!-- Background music -->
-<audio id="backgroundMusic" loop autoplay muted>
+<audio loop autoplay muted>
     <source src="songs/Young Metro.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
-
 
 <!-- Mute Button -->
 <button id="muteButton" style="position: fixed; bottom: 20px; right: 20px;">Mute</button>
@@ -455,56 +454,25 @@ megaAutoPointsButton.addEventListener('click', function() {
         }
     });
 
-
-    const playlist = [
-        "songs/Young Metro.mp3",
-        "songs/Ain't No Love.mp3",
-        "songs/Cinderella.mp3",
-        "songs/Claustrophobic.mp3",
-        "songs/Everyday Hustle",
-        "songs/Fried (She a Vibe).mp3",
-        "songs/GTA.mp3",
-        "songs/Ice Attack.mp3",
-        "songs/Magic Don Juan (Princess Diana).mp3",
-        "songs/Runnin Outta Time.mp3",
-        "songs/Seen it All.mp3",
-        "songs/Slimed In.mp3",
-        "songs/Type Shit.mp3",
-        "songs/We Don't Trust You.mp3",
-        "songs/Where My Twin @ - Bonus.mp3",
-        "songs/WTFYM.mp3",
-    ];
-
-     // Assuming 'backgroundMusic' is the correct ID for your <audio> element.
-        const backgroundMusic = document.getElementById('backgroundMusic'); // Ensure this ID matches your <audio> element's ID.
-
-            let currentSongIndex = -1; // Initialize with an invalid index.
-
-function playRandomSong() {
-    let randomIndex;
-    do {
-        randomIndex = Math.floor(Math.random() * playlist.length);
-    } while(playlist.length > 1 && randomIndex === currentSongIndex); // Avoid repeating the same song if there are multiple options.
-    currentSongIndex = randomIndex; // Update the current song index.
-
-    backgroundMusic.src = playlist[randomIndex];
-    backgroundMusic.play();
-}
-
-backgroundMusic.addEventListener('ended', playRandomSong);
-
-muteButton.addEventListener('click', function() {
-    if (backgroundMusic.paused) {
-        backgroundMusic.play().then(() => {
-            muteButton.textContent = 'Mute';
-        }).catch(error => {
-            console.error("Playback failed:", error);
-        });
+    // Mute button functionality
+    if (audio.paused) {
+        muteButton.textContent = 'Unmute';
     } else {
-        backgroundMusic.muted = !backgroundMusic.muted;
-        muteButton.textContent = backgroundMusic.muted ? 'Unmute' : 'Mute';
+        muteButton.textContent = 'Mute';
     }
-});
+
+    muteButton.addEventListener('click', function() {
+        if (audio.paused) {
+            audio.play().then(() => {
+                muteButton.textContent = 'Mute';
+            }).catch(error => {
+                console.error("Playback failed:", error);
+            });
+        } else {
+            audio.muted = !audio.muted;
+            muteButton.textContent = audio.muted ? 'Unmute' : 'Mute';
+        }
+    });
 
     setInterval(function() {
         if (pointsPerSecond > 0) {
